@@ -9,15 +9,15 @@
  */
 class Solution {
 public:
-	bool isSubtree(TreeNode* s, TreeNode* t, bool rootFound = false) {
-		if (!t) return rootFound && !s;
-		if (!s) return false;
-		if (s->val == t->val)
-			return (isSubtree(s->left, t->left, true) &&
-					isSubtree(s->right, t->right, true)) || 
-				!rootFound &&
-					(isSubtree(s->left, t, false) || isSubtree(s->right, t, false));
-		return !rootFound && (isSubtree(s->left, t, false) ||
-			isSubtree(s->right, t, false));
+	bool calc(TreeNode* s, TreeNode* t)
+	{
+		if (!t) return !s;
+		return s && s->val == t->val && calc(s->left, t->left) && calc(s->right, t->right);
+	}
+	bool isSubtree(TreeNode* s, TreeNode* t) {
+		if (!s) return !t;
+		if (calc(s, t))
+			return true;
+		return isSubtree(s->left, t) || isSubtree(s->right, t);
 	}
 };
