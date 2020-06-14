@@ -1,41 +1,32 @@
 class Solution {
 public:
-    int findCheapestPrice( int n, vector<vector<int>>& flights, int src, int dst, int K ) {
-        int result = -1;
-        vector<vector<int>> M( n, vector<int>( n, 100000000 ) );
-        for (const auto& f : flights)
-            M[f[0]][f[1]] = f[2];
-        for (int i = 0; i < n; ++i)
-            M[i][i] = 0;
-        queue<int> Q;        
-        vector<int> isVisited(n, 100000000);
-        isVisited[src] = 0;
-        for(int v = 0; v < n; ++v)
-            if (src != v && M[src][v] < 100000000)
-            {
-                isVisited[v] = M[src][v];
-                Q.push( v );
-                Q.push( 0 );
-            }
-        while (!Q.empty())
-        {
-            int v = Q.front(); Q.pop();
-            int stops = Q.front(); Q.pop();
-            for (int u = 0; u < n; ++u)
-                if (v != u)
-                {
-                    if (M[src][u] > M[src][v] + M[v][u])
-                        M[src][u] = M[src][v] + M[v][u];
-                    if (stops < K && isVisited[u] > M[src][u] )
-                    {
-                        isVisited[u] = M[src][u];
-                        Q.push( u );
-                        Q.push( stops + 1 );
-                    }
-                }
-        }
-        if (isVisited[dst] < 100000000)
-            result = isVisited[dst];
-        return result;
-    }
+	int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int K) {
+		int INF = 1'000'000'000;
+        ++K;
+		vector<vector<pair<int, int>>> connectivity(n);
+		for (vector<int> const& f : flights)
+			connectivity[f[0]].emplace_back(f[1], f[2]);
+		vector<vector<int>> F(K + 1, vector<int>(n, INF));
+		F[0][src] = 0;
+		queue<int> Q;
+		Q.push(0); Q.push(src);
+		while (!Q.empty())
+		{
+			int k = Q.front(); Q.pop();
+			int V = Q.front(); Q.pop();
+			if (k == K) continue;
+			for (pair<int, int> U : connectivity[V])
+				if (F[k][V] + U.second < F[k + 1][U.first])
+				{
+					F[k + 1][U.first] = F[k][V] + U.second;
+					Q.push(k + 1); Q.push(U.first);
+				}
+		}
+		int result = F[0][dst];
+		for (int k = 1; k <= K; ++k)
+			result = min(result, F[k][dst]);
+		if (result == INF)
+			result = -1;
+		return result;
+	}
 };
