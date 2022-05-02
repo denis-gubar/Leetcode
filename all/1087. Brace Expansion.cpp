@@ -1,48 +1,50 @@
 class Solution {
 public:
-	vector<string> result;
-	void calc(int pos, string& word, vector<vector<int>> const& A)
+	void calc(string const& S, string& prefix, int pos, vector<string>& result)
 	{
-		if (pos == word.size())
+		if (S.size() == pos)
 		{
-			result.push_back(word);
+			result.push_back(prefix);
 			return;
 		}
-		for (int x = 0; x < A[pos].size(); ++x)
+		if (S[pos] == '{')
 		{
-			word[pos] = A[pos][x];
-			calc(pos + 1, word, A);
+			vector<string> options;
+			++pos;
+			string buffer;
+			while (S[pos] != '}')
+			{
+				if (S[pos] == ',')
+				{
+					options.push_back(buffer);
+					buffer.clear();
+				}
+				else
+					buffer += S[pos];
+				++pos;
+			}
+			options.push_back(buffer);
+			++pos;
+			int length = prefix.size();
+			sort(options.begin(), options.end());
+			for (string const& option : options)
+			{
+				prefix += option;
+				calc(S, prefix, pos, result);
+				prefix.resize(length);
+			}
+		}
+		else
+		{
+			prefix += S[pos];
+			calc(S, prefix, pos + 1, result);
+			prefix.pop_back();
 		}
 	}
-	vector<string> permute(string S) {
-		result.clear();
-		vector<vector<int>> A;
-		bool flag = false;
-		for(int c: S)
-			switch (c)
-			{
-				case '{':
-					flag = true;
-                    A.push_back({});
-					break;
-				case ',':
-					break;
-				case '}':
-					flag = false;
-					break;
-				default:
-					if (!flag)
-						A.push_back({});
-					A.back().push_back(c);
-					break;
-			}
-		string word;
-		for (vector<int> & row : A)
-        {
-            sort(row.begin(), row.end());
-			word += row[0];
-        }
-		calc(0, word, A);
+	vector<string> expand(string S) {
+		vector<string> result;
+		string prefix;
+		calc(S, prefix, 0, result);
 		return result;
 	}
 };

@@ -5,9 +5,7 @@ public:
 		if (total < 2)
 			return 0;
 		int N = data.size();
-		int oneCount = data[0];
-		for (int i = 1; i < total; ++i)
-			oneCount += data[i];
+		int oneCount = accumulate(data.begin(), data.begin() + total, 0);
 		int result = total - oneCount;
 		for (int i = 1; i + total <= N; ++i)
 		{

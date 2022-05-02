@@ -8,8 +8,8 @@ public:
 		vector<pair<int, int>> A;
 		for (auto m : M)
 			A.push_back({ -m.second, m.first });
-        sort(A.begin(), A.end());
-		for (int i = 0; i < k && i < A.size(); ++i)
+        nth_element(A.begin(), A.begin() + (k - 1), A.end());
+		for (int i = 0; i < k; ++i)
 			result.push_back(A[i].second);
 		return result;
 	}

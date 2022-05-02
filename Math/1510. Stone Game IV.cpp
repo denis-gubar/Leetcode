@@ -5,7 +5,7 @@ public:
 		if (!F[n])
 		{
 			F[n] = 2;
-			for (int x = 1; x * x <= n; ++x)
+			for (int x = sqrt(n); x > 0; --x)
 				F[n] = min(F[n], 3 - calc(n - x * x, F));
 		}
 		return F[n];

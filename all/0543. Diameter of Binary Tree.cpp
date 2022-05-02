@@ -9,22 +9,17 @@
  */
 class Solution {
 public:
-    int result;
-    int calc( TreeNode* root )
-    {
-        int depth = 0;
-        if (root)
-        {
-            int left_depth = calc( root->left );
-            int right_depth = calc( root->right );
-            result = max( result, left_depth + right_depth );
-            depth = max( left_depth, right_depth ) + 1;
-        }
-        return depth;
-    }
-    int diameterOfBinaryTree( TreeNode* root ) {
-        result = 0;
-        calc( root );
-        return result;
-    }
+	int calc(TreeNode* root, int& result)
+	{
+		if (!root) return 0;
+		int left = 1 + calc(root->left, result);
+		int right = 1 + calc(root->right, result);
+		result = max(result, left + right - 2);
+		return max(left, right);
+	}
+	int diameterOfBinaryTree(TreeNode* root) {
+		int result = 0;
+		calc(root, result);
+		return result;
+	}
 };

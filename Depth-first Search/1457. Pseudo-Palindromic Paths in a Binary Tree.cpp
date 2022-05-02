@@ -25,10 +25,8 @@ public:
 				oddCount += d % 2;
 			result = oddCount <= 1;
 		}
-		if (root->left)
-			result += calc(root->left, digits);
-		if (root->right)
-			result += calc(root->right, digits);
+		result += calc(root->left, digits);
+		result += calc(root->right, digits);
 		--digits[root->val];
 		return result;
 	}

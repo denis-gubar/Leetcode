@@ -1,76 +1,79 @@
-struct UnionFind
-{
-	vector<int> id;
-	vector<int> sz;
-
-	UnionFind(int N) : id(vector<int>(N)), sz(vector<int>(N, 1))
-	{
-		for (int i = 0; i < N; ++i)
-			id[i] = i;
-	}
-	int root(int i)
-	{
-		while (i != id[i])
-		{
-			id[i] = id[id[i]];
-			i = id[i];
-		}
-		return i;
-	}
-	bool find(int p, int q)
-	{
-		return root(p) == root(q);
-	}
-	void unite(int p, int q)
-	{
-		int i = root(p);
-		int j = root(q);
-		if (sz[i] < sz[j])
-		{
-			id[i] = j; sz[j] += sz[i];
-		}
-		else
-		{
-			id[j] = i; sz[i] += sz[j];
-		}
-	}
-	void checkedUnite(int p, int q)
-	{
-		if (!find(p, q))
-			unite(p, q);
-	}
-};
 class Solution {
 public:
-	vector<int> numIslands2(int m, int n, vector<pair<int, int>>& positions) {
-		vector<int> result;
-		unordered_map<int, int> M;
-		vector<int> dx{ -1, 0, 1, 0 };
-		vector<int> dy{ 0, -1, 0, 1 };
-		int k = 0, count = 0;
-		UnionFind unionFind(m * n);
-		for (pair<int, int> p : positions)
+	struct UnionFind
+	{
+		vector<int> id;
+		vector<int> sy;
+
+		UnionFind(int N) : id(vector<int>(N)), sy(vector<int>(N, 1))
 		{
-			int x = p.first, y = p.second;
-			int key = x * n + y;
-			M[key] = k;
-			++k;
-			++count;
+			for (int i = 0; i < N; ++i)
+				id[i] = i;
+		}
+		int root(int i)
+		{
+			while (i != id[i])
+			{
+				id[i] = id[id[i]];
+				i = id[i];
+			}
+			return i;
+		}
+		bool find(int p, int q)
+		{
+			return root(p) == root(q);
+		}
+		void unite(int p, int q)
+		{
+			int i = root(p);
+			int j = root(q);
+			if (sy[i] < sy[j])
+			{
+				id[i] = j; sy[j] += sy[i];
+			}
+			else
+			{
+				id[j] = i; sy[i] += sy[j];
+			}
+		}
+		void checkedUnite(int p, int q)
+		{
+			if (!find(p, q))
+				unite(p, q);
+		}
+	};
+	vector<int> numIslands2(int m, int n, vector<vector<int>>& positions) {
+		vector<int>	result;
+		int current = 0;
+		int k = positions.size();
+		UnionFind unionFind(k);
+		map<vector<int>, int> lands;
+		vector<int>	dx{ 0, 1, 0, -1 };
+		vector<int>	dy{ 1, 0, -1, 0 };
+		for (int i = 0; i < k; ++i)
+		{
+			++current;
+            if (lands.find(positions[i]) != lands.end())
+            {
+                --current;
+                result.push_back(current);
+                continue;
+            }
+			lands[positions[i]] = i;
+			int const& x = positions[i][0];
+			int const& y = positions[i][1];
 			for (int z = 0; z < 4; ++z)
 			{
 				int nx = x + dx[z];
 				int ny = y + dy[z];
-				if (nx >= 0 && nx < m && ny >= 0 && ny < n)
+				auto it = lands.find({ nx, ny });
+				if (it != lands.end() && !unionFind.find(it->second, i))
 				{
-					int newKey = nx * n + ny;
-					if (M.find(newKey) != M.end() && !unionFind.find(key, newKey))
-					{
-						--count;
-						unionFind.unite(key, newKey);
-					}
+					unionFind.unite(it->second, i);
+					--current;
 				}
 			}
-			result.push_back(count);
+			result.push_back(current);
 		}
 		return result;
 	}

@@ -15,7 +15,7 @@ public:
 			return memo[num] = 2;
 		if (num == 2)
 			return memo[num] = 3;
-		return calc(num - 1) + calc(num - 2);
+		return memo[num] = calc(num - 1) + calc(num - 2);
 	}
 	int findIntegers(int num) {
 		if (num < 3)

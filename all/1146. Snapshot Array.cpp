@@ -1,20 +1,18 @@
 class SnapshotArray {
 public:
-	SnapshotArray(int length) {
-		history = vector<vector<pair<int, int>>>(length + 1);
-		snap_id = 0;
+	SnapshotArray(int length) : snap_id(0), history(vector<vector<pair<int, int>>>(length)) {
+
 	}
 
 	void set(int index, int val) {
 		if (history[index].empty() || history[index].back().first != snap_id)
-			history[index].push_back({ snap_id, val });
+			history[index].emplace_back(snap_id, val);
 		else
 			history[index].back().second = val;
 	}
 
 	int snap() {
-		++snap_id;
-		return snap_id - 1;
+		return snap_id++;
 	}
 
 	int get(int index, int snap_id) {
@@ -23,8 +21,8 @@ public:
 		--it;
 		return it->second;
 	}
-	vector<vector<pair<int, int>>> history;
 	int snap_id;
+	vector<vector<pair<int, int>>> history;
 };
 
 /**

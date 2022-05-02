@@ -1,51 +1,31 @@
-/**
- * Definition for binary tree with next pointer.
- * struct TreeLinkNode {
- *  int val;
- *  TreeLinkNode *left, *right, *next;
- *  TreeLinkNode(int x) : val(x), left(NULL), right(NULL), next(NULL) {}
- * };
- */
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+    Node* next;
+
+    Node() : val(0), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val) : val(_val), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val, Node* _left, Node* _right, Node* _next)
+        : val(_val), left(_left), right(_right), next(_next) {}
+};
+*/
+
 class Solution {
 public:
-    TreeLinkNode* find( TreeLinkNode* root, int path )
-    {
-        vector<int> bits;
-        while (path > 1)
-        {
-            bits.push_back( path & 1 );
-            path >>= 1;
-        }
-        TreeLinkNode* result = root;
-        reverse( bits.begin(), bits.end() );
-        for (const auto& bit : bits)
-            result = bit ? result->right : result->left;
-        return result;
-    }
-    void connect( TreeLinkNode* root ) {
-        if (!root)
-            return;
-        int height = 1;
-        TreeLinkNode* node = root;
-        while (node->right)
-        {
-            node = node->right;
-            ++height;
-        }
-        for (int level = height; level > 0; --level)
-        {
-            TreeLinkNode* nextNode = nullptr;
-            for (int nodeNumber = (1 << level) - 1; nodeNumber >= (1 << (level - 1)); --nodeNumber)
-            {
-                TreeLinkNode* currentNode = find( root, nodeNumber );
-                if (nodeNumber + 1 == (1 << level))
-                    nextNode = currentNode;
-                else
-                {
-                    currentNode->next = nextNode;
-                    nextNode = currentNode;
-                }
-            }
-        }
-    }
+	Node* connect(Node* root) {
+		if (root == nullptr) return nullptr;
+		if (root->left)
+			root->left->next = root->right;
+		if (root->right && root->next)
+			root->right->next = root->next->left;
+		connect(root->left);
+		connect(root->right);
+		return root;
+	}
 };

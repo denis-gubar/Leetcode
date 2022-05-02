@@ -9,7 +9,9 @@ public:
         for (int i = 0; i < S.size(); ++i)
         {
             auto it = lower_bound( positions.begin(), positions.end(), i );
-            int k = *it;
+            int k = -S.size();
+            if (it != positions.end())
+                k = *it;
             int nk = k;
             if (it != positions.begin())
                 nk = *(--it);

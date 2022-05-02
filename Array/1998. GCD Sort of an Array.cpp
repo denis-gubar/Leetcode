@@ -44,7 +44,8 @@ public:
 	};
 	bool gcdSort(vector<int>& nums) {
 		int N = nums.size();
-		cout << N << '\n';
+		cout << N << '
+';
 		vector<pair<int, int>> P(N);
 		for (int i = 0; i < N; ++i)
 			P[i] = { nums[i], i };

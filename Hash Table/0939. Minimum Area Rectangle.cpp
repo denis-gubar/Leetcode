@@ -1,23 +1,21 @@
 class Solution {
 public:
 	int minAreaRect(vector<vector<int>>& points) {
-		int result = 1000000007;
+		int INF = 1'000'000'000, result = INF;
 		set<vector<int>> S;
-		for (const vector<int>& point : points)
-			S.insert(point);
-		for (int i = 0; i < points.size(); ++i)
-		{
-			int A = points[i][0], B = points[i][1];
-			for (int j = i + 1; j < points.size(); ++j)
-			{
-				int C = points[j][0], D = points[j][1];
-				if (A != C && B != D &&
-					S.find({ A, D }) != S.end() &&
-					S.find({ C, B }) != S.end())
-					result = min(result, abs(A - C) * abs(B - D));
-			}
-		}
-		if (result == 1000000007)
+		for (vector<int> const& point : points)
+			S.emplace(point);
+		int N = points.size();
+		for (int i = 0; i < N; ++i)
+			for (int j = 1; j < N; ++j)
+				if (points[i][0] != points[j][0] && points[i][1] != points[j][1])
+				{
+					int area = abs(points[i][0] - points[j][0]) * abs(points[i][1] - points[j][1]);
+					if (area < result && S.find({ points[i][0], points[j][1] }) != S.end() &&
+						S.find({ points[j][0], points[i][1] }) != S.end())
+						result = area;
+				}
+		if (result == INF)
 			result = 0;
 		return result;
 	}

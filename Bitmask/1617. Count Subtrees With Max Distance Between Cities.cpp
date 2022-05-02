@@ -59,7 +59,8 @@ public:
 						/*for (int U = 0; U < n; ++U)
 							if (mask & (1 << U))
 								cout << U + 1;
-						cout << " " << D[V] << '\n';*/
+						cout << " " << D[V] << '
+';*/
 					}
 					break;
 				}

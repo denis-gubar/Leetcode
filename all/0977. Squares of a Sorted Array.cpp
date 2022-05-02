@@ -1,10 +1,11 @@
 class Solution {
 public:
 	vector<int> sortedSquares(vector<int>& A) {
-		vector<int> result(A);
-		for (int& a : result)
+		auto it = lower_bound(A.begin(), A.end(), 0);
+		for (int& a : A)
 			a *= a;
-		sort(result.begin(), result.end());
-		return result;
+		reverse(A.begin(), it);
+		inplace_merge(A.begin(), it, A.end());
+		return A;
 	}
 };

@@ -6,7 +6,7 @@ public:
 	}
 	vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
 		vector<vector<int>> result(points);
-		partial_sort(result.begin(), result.begin() + K, result.end(),
+		nth_element(result.begin(), result.begin() + (K - 1), result.end(),
 			[](const vector<int>& a, const vector<int>& b)
 		{
 			return calc(a) < calc(b);

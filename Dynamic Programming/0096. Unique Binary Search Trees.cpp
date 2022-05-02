@@ -1,9 +1,11 @@
 class Solution {
 public:
     int numTrees(int n) {
-        int C = 1;
+        vector<int> C(n + 1);
+        C[0] = 1;
         for(int k = 1; k <= n; ++k)
-            C = C * (4LL * k - 2) / (k + 1);
-        return C;
+            for(int i = 0; i < k; ++i)
+                C[k] += C[i] * C[k - i - 1];
+        return C[n];
     }
 };

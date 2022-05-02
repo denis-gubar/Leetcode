@@ -21,8 +21,6 @@ public:
 			else
 				a = m;
 		}
-        cout << calc(233920 / 4) << '\n';
-        cout << calc(233928 / 4) << '\n';
 		return 4 * b;
 	}
 };

@@ -1,12 +1,3 @@
-/**
- * Definition for an interval.
- * struct Interval {
- *     int start;
- *     int end;
- *     Interval() : start(0), end(0) {}
- *     Interval(int s, int e) : start(s), end(e) {}
- * };
- */
 class Solution {
 public:
 	enum EventType
@@ -14,13 +5,13 @@ public:
 		end = -1,
 		start = 1,
 	};
-	int minMeetingRooms(vector<Interval>& intervals) {
+    int minMeetingRooms(vector<vector<int>>& intervals) {
 		int result = 0;
 		vector<pair<int, int>> events;
-		for (const Interval& interval : intervals)
+		for (vector<int> const& interval : intervals)
 		{
-			events.push_back({ interval.start, EventType::start });
-			events.push_back({ interval.end, EventType::end });
+			events.push_back({ interval[0], EventType::start });
+			events.push_back({ interval[1], EventType::end });
 		}
 		sort(events.begin(), events.end());
 		int balance = 0;
@@ -29,6 +20,6 @@ public:
 			balance += event.second;
 			result = max(result, balance);
 		}
-		return result;
-	}
+		return result;        
+    }
 };

@@ -4,47 +4,50 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
-	vector<int>  isValidBST(TreeNode* root) {
-		if (!root)	return {1};
-		vector<int> L = isValidBST(root->left);
-		vector<int> R = isValidBST(root->right);
-		bool result = L.size() < 3 || L[2] < root->val;
-		result &= R.size() < 3 || R[1] > root->val;
-        result &= L[0];
-        result &= R[0];
-		int a = root->val, b = root->val;
-        cout << root->val << ' ' << result << '\n';
-		if (!result) return { 0 };
-		if (L.size() == 3)
-			a = L[1];
-		if (R.size() == 3)
-			b = R[2];
-		isBST[root] = result;
-		return { 1, a, b };
-	}
-	int sum(TreeNode* root)
+	struct Data
 	{
-		if (!root) return 0;
-		int result = root->val + sum(root->left) + sum(root->right);
-		if (isBST[root])
-        {
-			bestSum = max(bestSum, result);
-        }
+		bool isBST;
+		int left;
+		int right;
+		int sum;
+		int result;
+	};
+	Data calc(TreeNode* root)
+	{
+		if (!root)
+			return {};
+		Data result{ true, root->val, root->val, root->val, 0 };
+		if (root->left)
+		{
+			Data left = calc(root->left);
+			result.sum += left.sum;
+			result.result = max(result.result, left.result);
+			result.isBST &= left.isBST;
+			result.isBST &= left.right < result.left;
+			result.left = left.left;
+		}
+		if (root->right)
+		{
+			Data right = calc(root->right);
+			result.sum += right.sum;
+			result.result = max(result.result, right.result);
+			result.isBST &= right.isBST;
+			result.isBST &= right.left > result.right;
+			result.right = right.right;
+		}
+		if (result.isBST)
+			result.result = max(result.result, result.sum);
 		return result;
 	}
 	int maxSumBST(TreeNode* root) {
-		if (!root) return 0;
-		bestSum = 0;
-		isBST.clear();
-		isValidBST(root);
-        sum(root);
-        return bestSum;
+		Data result = calc(root);
+		return result.result;
 	}
-	map<TreeNode*, bool> isBST;
-	int bestSum;
 };

@@ -5,7 +5,8 @@ public:
 		cout << label << ": ";
 		for (int i = 0; i <= n; ++i)
 			cout << A[i];
-		cout << '\n';
+		cout << '
+';
 	}
 	int getLastMoment(int n, vector<int>& left, vector<int>& right) {
 		int result = 0;

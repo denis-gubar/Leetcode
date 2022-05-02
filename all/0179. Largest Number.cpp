@@ -14,7 +14,7 @@ public:
 		for (auto i : A)
 			result += to_string( i );
 		if (A[0] == 0)
-			return string( 1, '0' );
+			return "0"s;
 		return result;
 	}
 };

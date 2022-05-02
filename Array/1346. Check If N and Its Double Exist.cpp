@@ -1,10 +1,13 @@
 class Solution {
 public:
 	bool checkIfExist(vector<int>& arr) {
-		sort(arr.begin(), arr.end());
-		for(int a: arr)
-			if (a != 0 && binary_search(arr.begin(), arr.end(), a * 2))
+		unordered_set<int> S;
+        sort(begin(arr), end(arr));
+		for (int a : arr)
+			if (S.find(a * 2) != S.end() || a % 2 == 0 && S.find(a / 2) != S.end())
 				return true;
-		return count(arr.begin(), arr.end(), 0) > 1;
+			else
+				S.insert(a);
+		return false;
 	}
 };

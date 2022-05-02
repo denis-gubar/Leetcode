@@ -1,12 +1,15 @@
+int id[100'001];
+int sz[100'001];
+int M[100'001];
+int primes[10'000];
 struct UnionFind
 {
-	vector<int> id;
-	vector<int> sz;
+    int16_t N;
 
-	UnionFind(int N) : id(vector<int>(N)), sz(vector<int>(N, 1))
+	UnionFind(int N) : N(N)
 	{
-		for (int i = 0; i < N; ++i)
-			id[i] = i;
+        iota(id, id + N, 0);
+        fill(sz, sz + N, 1);
 	}
 	int root(int i)
 	{
@@ -40,38 +43,48 @@ class Solution {
 public:
 	int largestComponentSize(vector<int>& A) {
 		int N = A.size();
-		UnionFind unionFind(N);
-		vector<char> isPrime(100001, 1);
+		UnionFind unionFind(100001);
+		vector<bool> isPrime(100001, 1);
 		isPrime[1] = isPrime[0] = 0;
 		for (int i = 2; i * i < 100001; ++i)
 			if (isPrime[i])
 				for (int k = i * i; k < 100001; k += i)
 					isPrime[k] = 0;
-		vector<int> primes;
+		int primeCount = 0;        
 		for (int i = 2; i < 100001; ++i)
 			if (isPrime[i])
-				primes.push_back(i);
-		vector<vector<int>> M(10000);
+            {
+				primes[primeCount] = i;
+                ++primeCount;
+            }
+		memset(M, -1, sizeof(M));
 		for (int i = 0; i < N; ++i)
 		{
-			int a = A[i];
+			int a = A[i];            
 			for (int p = 0; a > 1; ++p)
 			{
-				if (a % primes[p] == 0)
+                int x = primes[p];
+                if (isPrime[a])
+                {
+                    if (a * 2 > 100'000)
+                        break;
+                    x = a;
+                }                
+				if (a % x == 0)
 				{
-					M[p].push_back(i);
+					if (M[x] != -1)
+                    {
+                        if (!unionFind.find(M[x], A[i]))
+						    unionFind.unite(M[x], A[i]);
+                    }
+                    M[x] = A[i];
 					do
 					{
-						a /= primes[p];
-					} while (a % primes[p] == 0);
+						a /= x;
+					} while (a % x == 0);
 				}
 			}
 		}
-		for (int i = 0; i < 10000; ++i)
-			if (M[i].size() > 1)
-				for (int j = 1; j < M[i].size(); ++j)
-					if (!unionFind.find(M[i][0], M[i][j]))
-						unionFind.unite(M[i][0], M[i][j]);
-		return *max_element(unionFind.sz.begin(), unionFind.sz.end());
+		return *max_element(sz, sz + sizeof(sz) / sizeof(sz[0]));
 	}
 };

@@ -1,6 +1,8 @@
 class Solution {
 public:
     bool isNumber( string s ) {
+        for(char& c: s)
+            c = tolower(c);
         int a = 0;
         while (a < s.size() && s[a] == ' ')
             ++a;

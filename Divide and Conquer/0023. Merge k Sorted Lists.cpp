@@ -14,8 +14,8 @@ public:
 			return a && (!b || a->val > b->val);
 		};
 
-		ListNode* start = new ListNode(0);
-		ListNode* node = start;
+		ListNode start(0);
+		ListNode* node = &start;
 		lists.erase(remove(lists.begin(), lists.end(), nullptr), lists.end());
 		make_heap(lists.begin(), lists.end(), comparator);
 		while (!lists.empty())
@@ -32,8 +32,7 @@ public:
 			node->next = minNode;
 			node = node->next;
 		}
-		ListNode* result = start->next;
-		delete start;
+		ListNode* result = start.next;
 		return result;
 	}
 };

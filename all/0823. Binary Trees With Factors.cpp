@@ -5,8 +5,7 @@ public:
         int result = 0;
         sort( A.begin(), A.end() );
         A.erase( unique( A.begin(), A.end() ), A.end() );
-        set<int> S( A.begin(), A.end() );
-        map<int, int> M;
+        unordered_map<int, int> M;
         for (int i = 0; i < A.size(); ++i)
         {
             M[A[i]] = 1;
@@ -17,7 +16,7 @@ public:
                     M[A[i]] %= MOD;
                 }
         }
-        for (const auto& m : M)
+        for (auto m : M)
         {
             result += m.second;
             result %= MOD;

@@ -3,7 +3,7 @@ public:
 	int maxProduct(vector<int>& nums) {
 		int result = *max_element(nums.begin(), nums.end());
 		nums.push_back(0);
-		int a = 0, b = 0, product = 1, negativeCount = 0;
+		int a = 0, b = 0, product = 1;
 		while (b < nums.size())
 		{
 			if (nums[b] == 0)

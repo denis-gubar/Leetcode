@@ -1,8 +1,8 @@
 class Solution {
 public:
 	int numUniqueEmails(vector<string>& emails) {
-		set<string> S;
-		for (const string& e : emails)
+		unordered_set<string> S;
+		for (string const& e : emails)
 		{
 			vector<string> parts(2);
 			int pos = e.find('@');

@@ -16,7 +16,7 @@ public:
 		int s = X / A + X / B - 1;
 		int k = N / s;
 		result = X * k % MOD;
-		int delta = 0, a = A, b = B;
+		long long delta = 0, a = A, b = B;
 		for (int i = k * s; i < N; ++i)
 		{
 			if (a < b)

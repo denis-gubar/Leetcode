@@ -1,15 +1,21 @@
 class Solution {
 public:
-	void sortColors( vector<int>& nums ) {
-		int r = count( nums.begin(), nums.end(), 0 );
-		int w = count( nums.begin(), nums.end(), 1 );
-		int b = count( nums.begin(), nums.end(), 2 );
-		int i = 0;
-		for (int k = 0; k < r; ++i, ++k)
-			nums[i] = 0;
-		for (int k = 0; k < w; ++i, ++k)
-			nums[i] = 1;
-		for (int k = 0; k < b; ++i, ++k)
-			nums[i] = 2;
+	void sortColors(vector<int>& nums) {
+		int a = 0, b = nums.size() - 1;
+        for(int i = 0; i <= b;)
+		{
+            if (nums[i] == 0)
+            {
+                swap(nums[i], nums[a]);
+                ++i, ++a;
+            }
+            else if (nums[i] == 2)
+            {
+                swap(nums[i], nums[b]);
+                --b;
+            }
+			else
+                ++i;
+		}
 	}
 };

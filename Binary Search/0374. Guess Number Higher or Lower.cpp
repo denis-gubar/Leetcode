@@ -9,19 +9,19 @@
 
 class Solution {
 public:
-    int guessNumber(int n) {
-        long long a = 1, b = n;
-        while(a <= b)
-        {
-            long m = (a + b) / 2;
-            int result = guess(m);
-            if (result == 0)
-                return m;
-            if (result == -1)
-                b = m - 1;
-            else
-                a = m + 1;
-        }
-        return -1;
-    }
+	int guessNumber(int n) {
+		long long a = 0, b = n + 1LL;
+		while (a < b)
+		{
+			long long m = (a + b) / 2;
+			int guessResult = guess(m);
+			if (guessResult == 0)
+				return m;
+			if (guessResult < 0)
+				b = m;
+			else
+				a = m;
+		}
+		return a;
+	}
 };

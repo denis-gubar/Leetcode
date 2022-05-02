@@ -9,10 +9,10 @@
 class Solution {
 public:
 	ListNode* partition(ListNode* head, int x) {
-		ListNode* startLo = new ListNode(0);
-		ListNode* startHi = new ListNode(0);
-		ListNode* nodeLo = startLo;
-		ListNode* nodeHi = startHi;
+		ListNode startLo(0);
+		ListNode startHi(0);
+		ListNode* nodeLo = &startLo;
+		ListNode* nodeHi = &startHi;
 		ListNode* node = head;
 		while (node)
 		{
@@ -29,10 +29,8 @@ public:
 			node = node->next;
 		}
 		nodeHi->next = nullptr;
-		nodeLo->next = startHi->next;
-		ListNode* result = startLo->next;
-		delete startLo;
-		delete startHi;
+		nodeLo->next = startHi.next;
+		ListNode* result = startLo.next;
 		return result;
 	}
 };

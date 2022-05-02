@@ -9,23 +9,16 @@
  */
 class Solution {
 public:
-	const int MOD = 1'000'000'007;
 	int sumRootToLeaf(TreeNode* root, int prefix = 0) {
 		if (!root)
 			return prefix;
 		if (!root->left && !root->right)
-			return (prefix * 2 % MOD + root->val) % MOD;
+			return prefix * 2 + root->val;
 		int result = 0;
 		if (root->left)
-        {
-			result += sumRootToLeaf(root->left, prefix * 2 % MOD + root->val);
-            result %= MOD;
-        }
+			result += sumRootToLeaf(root->left, prefix * 2 + root->val);
 		if (root->right)
-        {
-			result += sumRootToLeaf(root->right, prefix * 2 % MOD + root->val);
-            result %= MOD;
-        }
-		return result % MOD;
+			result += sumRootToLeaf(root->right, prefix * 2 + root->val);
+		return result;
 	}
 };

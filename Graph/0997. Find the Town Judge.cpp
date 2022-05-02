@@ -1,17 +1,19 @@
 class Solution {
 public:
 	int findJudge(int N, vector<vector<int>>& trust) {
-        if (trust.empty())
-            return 1;
-		vector<int> A(N + 1), T(N + 1);
-		for (int i = 0; i < trust.size(); ++i)
-			++A[trust[i][1]], ++T[trust[i][0]];
-		vector<pair<int, int>> P;
+		int result = -1;
+		vector<int> visited(N + 1);
+		for (vector<int> const& t : trust)
+			visited[t[0]] = 1;
 		for (int i = 1; i <= N; ++i)
-			P.push_back({ -A[i], i });
-		sort(P.begin(), P.end());
-		if (P[0].first == P[1].first || -P[0].first + 1 != N || T[P[0].second])
-			return -1;
-		return P[0].second;
+			if (visited[i] == 0)
+            {
+                int count = 1;
+                for (vector<int> const& t : trust)
+			        count += t[1] == i;
+                if (count == N)
+				    result = i;
+            }
+		return result;
 	}
 };

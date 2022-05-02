@@ -5,7 +5,7 @@ public:
 		int delta = target;
 		if (N)
 			delta -= stations.back()[0];
-		vector<vector<int>> M(N + 1, vector<int>(N + 1, -1));
+		vector<vector<long long>> M(N + 1, vector<long long>(N + 1, -1));
 		M[0][0] = startFuel;
 		for (int i = 1; i <= N; ++i)
 		{

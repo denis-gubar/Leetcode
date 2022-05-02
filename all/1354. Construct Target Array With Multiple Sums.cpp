@@ -1,25 +1,27 @@
 class Solution {
 public:
-	bool isPossible(vector<int>& target) {
+	bool isPossible(vector<int> target) {
+		priority_queue<long long> Q;
+		for (int x : target)
+			Q.push(x);
 		long long total = accumulate(target.begin(), target.end(), 0LL);
-		map<int, int> M;
-		multiset<int> S;
-		for (int t : target)
-			++M[-t];
-		while (-M.begin()->first > 1)
+		while (!Q.empty())
 		{
-			int x = -M.begin()->first;
-			if (M.begin()->second == 1)
-				M.erase(M.begin());
-			else
-				--M[-x];
-			long long delta = total - x;
-			if (x <= delta || delta == 0)
+			long long x = Q.top(); Q.pop();
+			if (x == 1)
+				return true;
+            if (Q.empty())
+                return false;
+			long long rest = total - x;
+			long long delta = x - Q.top() - 1;
+			long long newX = x - delta / rest * rest;
+            if (x == newX)
+                newX = x - rest;
+			if (newX <= 0)
 				return false;
-			x -= delta;
-            total -= delta;
-			++M[-x];
+			Q.push(newX);
+			total += newX - x;
 		}
-		return true;
+		return false;
 	}
 };

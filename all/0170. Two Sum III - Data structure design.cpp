@@ -2,7 +2,6 @@ class TwoSum {
 public:
     /** Initialize your data structure here. */
     TwoSum() {
-        M.clear();
     }
     
     /** Add the number to an internal data structure.. */
@@ -25,7 +24,7 @@ public:
         }
         return false;
     }
-    map<int, int> M;
+    unordered_map<int, int> M;
 };
 
 /**

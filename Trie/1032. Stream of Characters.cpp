@@ -1,34 +1,51 @@
 class StreamChecker {
 public:
-	StreamChecker(vector<string>& words) : w(words), dictionary(vector<vector<string>>(26)) {
-		buffer.reserve(40'000);
-		for (int i = 0; i < w.size(); ++i)
-			dictionary[w[i].back() - 'a'].push_back(w[i]);
-		for (int i = 0; i < 26; ++i)
-			sort(dictionary[i].begin(), dictionary[i].end(),
-				[](string const& a, string const& b)
-				{
-					return a.size() < b.size();
-				});
+	struct Trie
+	{
+		unordered_map<char, Trie*> children;
+		void add(string const& s)
+		{
+			Trie* node = this;
+			for (int i = s.size() - 1; i >= 0; --i)
+			{
+				char const& c = s[i];
+				if (node->children.find(c) == node->children.end())
+					node->children[c] = new Trie();
+				node = node->children[c];
+			}
+			if (node->children.find('$') == node->children.end())
+				node->children['$'] = new Trie();
+		}
+		bool search(string const& s)
+		{
+			Trie* node = this;
+			for (int i = s.size() - 1; i >= 0; --i)
+			{
+				char const& c = s[i];                
+				if (node->children.find(c) == node->children.end())
+					return false;
+				node = node->children[c];
+                if (node->children.find('$') != node->children.end())
+                    return true;
+			}
+			return false;
+		}
+	};
+	Trie* trie;
+	string stream;
+	StreamChecker(vector<string>& words) {
+		trie = new Trie();
+		for (string const& w : words)
+		{
+			trie->add(w);
+		}
 	}
 
 	bool query(char letter) {
-		buffer += letter;
-		for (int i = 0; i < dictionary[letter - 'a'].size(); ++i)
-		{
-			string const& word = dictionary[letter - 'a'][i];
-			if (word.size() > buffer.size())
-				return false;
-			if (equal(word.begin(), word.end(), buffer.begin() + (buffer.size() - word.size()), buffer.end()))
-				return true;
-		}
-		return false;
+		stream += letter;
+		return trie->search(stream);
 	}
-	string buffer;
-	vector<string> w;
-	vector<vector<string>> dictionary;
 };
-
 
 /**
  * Your StreamChecker object will be instantiated and called as such:

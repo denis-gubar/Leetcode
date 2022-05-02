@@ -4,19 +4,26 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
-    TreeNode* buildTree( const vector<int>& preorder, const vector<int>& inorder ) {
-        if (inorder.empty())
-            return nullptr;
-        int root_value = preorder[0];
-        int left_length = distance( inorder.begin(), find( inorder.begin(), inorder.end(), root_value ) );
-        TreeNode* root = new TreeNode( root_value );
-        root->left = buildTree( vector<int>( preorder.begin() + 1, preorder.begin() + left_length + 1 ), vector<int>( inorder.begin(), inorder.begin() + left_length ) );
-        root->right = buildTree( vector<int>( preorder.begin() + left_length + 1, preorder.end() ), vector<int>( inorder.begin() + left_length + 1, inorder.end() ) );
-        return root;
-    }
+	using Iterator = vector<int>::iterator;
+	TreeNode* calc(Iterator pre_first, Iterator pre_last, Iterator in_first, Iterator in_last)
+	{
+		if (pre_first == pre_last) return nullptr;
+		TreeNode* root = new TreeNode(*pre_first);
+		auto in_middle = find(in_first, in_last, *pre_first);
+        ++pre_first;
+		auto delta = in_middle - in_first;
+		root->left = calc(pre_first, pre_first + delta, in_first, in_middle);
+		root->right = calc(pre_first + delta, pre_last, in_middle + 1, in_last);
+		return root;
+	}
+	TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+		return calc(preorder.begin(), preorder.end(), inorder.begin(), inorder.end());
+	}
 };

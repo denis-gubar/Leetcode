@@ -2,16 +2,19 @@ class Solution {
 public:
 	bool isLongPressedName(string name, string typed) {
 		int a = 0, b = 0;
-		char lastTyped = ' ';
+		char prev = '$';
 		while (b < typed.size())
 		{
-			if (a < name.size() && name[a] == typed[b])
-				lastTyped = name[a], ++a, ++b;
-			else if ((a == name.size() || name[a] != typed[b]) && typed[b] == lastTyped)
-				++b;
-			else
+			if (name[a] == typed[b])
+			{                
+				prev = name[a], ++a, ++b;
+				if (a == name.size() && b == typed.size()) return true;
+				continue;
+			}
+			if (typed[b] != prev)
 				return false;
+			++b;
 		}
-		return a == name.size();
+		return a == name.size() && b == typed.size();
 	}
 };

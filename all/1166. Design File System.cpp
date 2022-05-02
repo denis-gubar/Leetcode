@@ -14,7 +14,7 @@ public:
 		return path;
 	}
 
-	bool create(string path, int value) {
+	bool createPath(string path, int value) {
 		if (M.find(path) == M.end())
 		{
 			string parent = getParent(path);

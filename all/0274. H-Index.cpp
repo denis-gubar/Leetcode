@@ -1,30 +1,18 @@
 class Solution {
 public:
 	int hIndex( vector<int>& citations ) {
-		if (citations.empty())
-			return 0;
-		int n = citations.size();
-		vector<int> A( citations );
-		sort( A.begin(), A.end() );
-		int position = n - 1, k = 0, h = n;
-		while (true)
+		sort(citations.begin(), citations.end());
+        int N = citations.size();
+		if (!N || citations[0] >= N) return N;
+		int a = 0, b = N;
+		while (a + 1 < b)
 		{
-			int g = 0, e = 0;
-			for (int p = position; p >= 0; --p)
-			{
-				if (A[p] < h)
-					break;
-				if (A[p] > h)
-					++g;
-				if (A[p] == h)
-					++e;
-			}
-			if (k + g + e >= h && k + g <= h)
-				return h;
-			position -= g;
-			k += g;
-			--h;
+			int m = (a + b) / 2;
+			if (citations[N - m] >= m)
+				a = m;
+			else
+				b = m;
 		}
-		return 0;
-	}
+		return a;	
+    }
 };

@@ -4,27 +4,23 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
-	void calc(TreeNode* root, int level, map<int, int>& Parents, map<int, int>& Levels)
+	pair<TreeNode*, int> calc(TreeNode* root, int x, TreeNode* parent = nullptr, int level = 0)
 	{
-		if (root)
-		{
-			Levels[root->val] = level;
-			if (root->left)
-				Parents[root->left->val] = root->val;
-			if (root->right)
-				Parents[root->right->val] = root->val;
-			calc(root->left, level + 1, Parents, Levels);
-			calc(root->right, level + 1, Parents, Levels);
-		}
+		if (!root) return {};
+		if (root->val == x) return { parent, level };
+		return max(calc(root->left, x, root, level + 1),
+			calc(root->right, x, root, level + 1));
 	}
 	bool isCousins(TreeNode* root, int x, int y) {
-		map<int, int> Parents, Levels;
-		calc(root, 0, Parents, Levels);
-		return Levels[x] == Levels[y] && Parents[x] != Parents[y];
+		auto X = calc(root, x);
+		auto Y = calc(root, y);
+		return X.second == Y.second && X.first != Y.first;
 	}
 };

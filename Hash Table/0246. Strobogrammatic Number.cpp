@@ -1,17 +1,13 @@
 class Solution {
 public:
 	bool isStrobogrammatic(string num) {
-		string good = "01689";
-		string rotated = "01986";
-		string rotatedNum;
-		for (int c : num)
-		{
-			int pos = good.find(c);
-			if (pos == string::npos)
+		string from{ "01869" };
+		string to{ "01896" };
+		string s(num);
+		reverse(s.begin(), s.end());
+		for (int i = 0; i < num.size(); ++i)
+			if (int pos = from.find(num[i]); pos == string::npos || s[i] != to[pos])
 				return false;
-			rotatedNum += rotated[pos];
-		}
-		reverse(rotatedNum.begin(), rotatedNum.end());
-		return num == rotatedNum;
+		return true;
 	}
 };

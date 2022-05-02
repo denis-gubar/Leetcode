@@ -5,8 +5,7 @@ public:
 			return 0;
 		int result = *max_element(nums.begin(), nums.end());
 		vector<int> A(nums.size() + 1);
-		for (int i = 0; i < nums.size(); ++i)
-			A[i + 1] = A[i] + nums[i];
+        partial_sum(nums.begin(), nums.end(), A.begin() + 1);
 		int current = A[0];
 		for (int a : A)
 			if (current < a)

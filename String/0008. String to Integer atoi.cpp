@@ -5,7 +5,8 @@ public:
 		int sign = 1;
 		int n = str.size();
 		int k = 0;
-		while (k < n && (str[k] == ' ' || str[k] == '\t' || str[k] == '\r' || str[k] == '\n'))
+		while (k < n && (str[k] == ' ' || str[k] == '	' || str[k] == '\r' || str[k] == '
+'))
 			++k;
 		if (k < n && str[k] == '-')
 		{

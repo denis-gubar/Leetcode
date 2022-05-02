@@ -1,24 +1,23 @@
 class StockSpanner {
 public:
-	StockSpanner() : pos(0) {
-		A.clear();
-		spans.clear();
+	StockSpanner() {
+        ios::sync_with_stdio(false);
+        cin.tie(0);
 	}
 
 	int next(int price) {
-		A.push_back(price);
 		int result = 1;
-		if (pos && A[pos] >= A[pos - 1])
+		while (!A.empty() && price >= A.top())
 		{
-			for (int x = pos - 1; x >= 0 && A[x] <= A[pos]; x -= spans[x])
-				result += spans[x];
+			result += spans.top();
+            spans.pop();
+            A.pop();
 		}
-		++pos;
-		spans.push_back(result);
+        A.push(price);
+		spans.push(result);
 		return result;
 	}
-	vector<int> A, spans;
-	int pos;
+	stack<int> A, spans;
 };
 
 /**

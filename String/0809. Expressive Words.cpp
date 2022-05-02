@@ -1,37 +1,35 @@
 class Solution {
 public:
-    int expressiveWords( string S, vector<string>& words ) {
-        int result = 0;
-        vector<pair<int, int>> A;
-        for (int i = 0; i < S.size(); ++i)
-        {
-            if (i && S[i] == S[i - 1])
-                ++A.back().second;
-            else
-                A.push_back( { S[i], 1 } );
-        }
-        for (const string& word : words)
-        {
-            vector<pair<int, int>> B;
-            for (int i = 0; i < word.size(); ++i)
-            {
-                if (i && word[i] == word[i - 1])
-                    ++B.back().second;
-                else
-                    B.push_back( {word[i], 1} );
-            }
-            if (A.size() == B.size())
-            {
-                int flag = 1;
-                for(int i = 0; i < A.size(); ++i)
-                    if (A[i].first != B[i].first || A[i].second < B[i].second || (B[i].second == 1 && A[i].second == 2))
-                    {
-                        flag = 0; break;
-                    }
-                result += flag;
-            }
-        }
-
-        return result;
-    }
+	vector<pair<char, int>> calc(string const& word)
+	{
+		vector<pair<char, int>> result;
+		for (int i = 0; i < word.size(); )
+		{
+			char x = word[i];
+			int xcount = 0;
+			while (i < word.size() && x == word[i])
+				++i, ++xcount;
+			result.push_back({ x, xcount });
+		}
+		return result;
+	}
+	int expressiveWords(string S, vector<string>& words) {
+		int result = 0;
+		vector<pair<char, int>> P = calc(S);
+		for (string const& word : words)
+		{
+			vector<pair<char, int>> A = calc(word);
+			if (A.size() != P.size())
+				continue;
+			bool flag = true;
+			for (int i = 0; flag && i < P.size(); ++i)
+			{
+				flag &= A[i].first == P[i].first;
+				flag &= A[i].second == P[i].second || A[i].second < P[i].second &&
+					P[i].second >= 3;
+			}
+			result += flag;
+		}
+		return result;
+	}
 };

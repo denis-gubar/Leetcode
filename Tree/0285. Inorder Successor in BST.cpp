@@ -9,18 +9,21 @@
  */
 class Solution {
 public:
-	void calc(TreeNode* root, vector<TreeNode*>& nodes)
+	TreeNode* calc(TreeNode* root, TreeNode* p, bool& isFound)
 	{
 		if (!root)
-			return;
-		calc(root->left, nodes);
-		nodes.push_back(root);
-		calc(root->right, nodes);
+			return nullptr;
+		TreeNode* result = calc(root->left, p, isFound);
+		if (result)
+			return result;
+		if (isFound)
+			return root;
+		isFound = p == root;
+		result = calc(root->right, p, isFound);
+		return result;
 	}
 	TreeNode* inorderSuccessor(TreeNode* root, TreeNode* p) {
-		vector<TreeNode*> nodes;
-		calc(root, nodes);
-		nodes.push_back(nullptr);
-		return *(find(nodes.begin(), nodes.end(), p) + 1);
+		bool isFound = false;
+		return calc(root, p, isFound);
 	}
 };

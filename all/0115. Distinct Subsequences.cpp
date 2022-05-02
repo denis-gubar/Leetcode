@@ -1,15 +1,15 @@
+int M[1001][1001];
 class Solution {
 public:
     string S;
     string T;
     int n;
-    int m;
-    vector<vector<int>> M;
+    int m;    
     int calc( int ns, int nt )
     {
         if (nt == m)
             return 1;
-        if (ns == n)
+        if (n - ns < m - nt)
             return 0;
         if (M[ns][nt] >= 0)
             return M[ns][nt];
@@ -31,7 +31,7 @@ public:
     int numDistinct( string s, string t ) {
         S = s; T = t;
         n = s.size(); m = t.size();
-        M = vector<vector<int>>( n + 1, vector<int>( m + 1, -1 ) );
+        memset(M, -1, sizeof(M));
         return calc( 0, 0 );
     }
 };

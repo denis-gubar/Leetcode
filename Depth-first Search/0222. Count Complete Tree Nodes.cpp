@@ -11,24 +11,32 @@
  */
 class Solution {
 public:
-	int calc(TreeNode* root)
+	int getHeight(TreeNode* root)
 	{
 		if (!root) return 0;
-		return 1 + calc(root->left);
+		return 1 + getHeight(root->left);
 	}
 	int countNodes(TreeNode* root) {
-		if (!root)
-			return 0;
-		int height = calc(root);
+		int height = getHeight(root);
+		if (!height) return 0;
 		--height;
 		int result = (1 << height) - 1;
-		int a = 0, b = 1 << height;
+		int a = 0, b = (1 << height) + 1;
 		while (a + 1 < b)
 		{
 			int m = (a + b) / 2;
+			vector<int>	digits;
+			int n = m - 1;
+			while (n)
+			{
+				digits.push_back(n % 2);
+				n /= 2;
+			}
+			digits.resize(height, 0);
+			reverse(digits.begin(), digits.end());
 			TreeNode* node = root;
-			for (int k = 0; k < height; ++k)
-				if (m & (1 << (height - k - 1)))
+			for (int i = 0; i < digits.size(); ++i)
+				if (digits[i])
 					node = node->right;
 				else
 					node = node->left;
@@ -37,6 +45,6 @@ public:
 			else
 				b = m;
 		}
-		return result + a + 1;
+		return result + a;
 	}
 };

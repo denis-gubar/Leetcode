@@ -1,24 +1,21 @@
 class Solution {
 public:
-    bool validMountainArray(vector<int>& A) {
-        if (A.size() < 3 || A[0] >= A[1])
-            return false;
-        int state = 0;
-        for(int i = 1; i < A.size(); ++i)
-        {
-            if (state == 0)
-            {
-                if (A[i] == A[i - 1])
-                    return false;
-                if (A[i] < A[i - 1])
-                    state = 1;
-            }
-            else if (state == 1)
-            {
-                if (A[i] >= A[i - 1])
-                    return false;
-            }
-        }
-        return state == 1;
-    }
+	bool validMountainArray(vector<int>& A) {
+		if (A.size() < 3) return false;
+		if (unique(A.begin(), A.end()) != A.end())
+			return false;
+		auto it = max_element(A.begin(), A.end());
+		if (!is_sorted(A.begin(), next(it),
+			[](int a, int b)
+			{
+				return a < b;
+			}) || next(it) == A.end() || it == A.begin() ||
+				!is_sorted(next(it), A.end(),
+					[](int a, int b)
+					{
+						return a > b;
+					}))
+			return false;
+					return true;
+	}
 };

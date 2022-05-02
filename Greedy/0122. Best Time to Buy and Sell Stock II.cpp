@@ -1,14 +1,16 @@
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
-        if (prices.empty())
-            return 0;
-        int result = 0, last = prices[0];
-        for(int p: prices)
+        int result = 0;
+        if (!prices.empty())
         {
-            if (p > last)
-                result += p - last;
-            last = p;
+            int current = prices[0];
+            for(int price: prices)
+            {
+                if (current < price)
+                    result += price - current;
+                current = price;
+            }
         }
         return result;
     }

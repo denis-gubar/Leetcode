@@ -1,31 +1,27 @@
-/**
- * Definition for an interval.
- * struct Interval {
- *     int start;
- *     int end;
- *     Interval() : start(0), end(0) {}
- *     Interval(int s, int e) : start(s), end(e) {}
- * };
- */
 class Solution {
 public:
-	vector<Interval> merge(vector<Interval>& intervals) {
-		vector<Interval> result;
-		vector<pair<int, int>> events;
-		for (const Interval& i : intervals)
+	vector<vector<int>> merge(vector<vector<int>>& intervals) {
+		vector<vector<int>> result;
+		vector<pair<int, int>> P;
+		for (vector<int> const& interval : intervals)
 		{
-			events.push_back({ i.start, -1 });
-			events.push_back({ i.end, 1 });
+			P.emplace_back(interval[0], -1);
+			P.emplace_back(interval[1], 1);
 		}
-		sort(events.begin(), events.end());
-		int balance = 0;
-		int start = 0;
-		for (pair<int, int> e : events)
+		sort(P.begin(), P.end());
+		int balance = 0, start = 0;
+		for (auto p : P)
 		{
-			if (e.second == 1 && --balance == 0)
-				result.push_back(Interval(start, e.first));
-			else if (e.second == -1 && ++balance == 1)
-				start = e.first;
+			if (p.second == -1)
+			{
+				if (++balance == 1)
+					start = p.first;
+			}
+			else
+			{
+				if (--balance == 0)
+					result.push_back({ start, p.first });
+			}
 		}
 		return result;
 	}

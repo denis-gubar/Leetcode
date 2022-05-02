@@ -2,11 +2,11 @@ class Solution {
 public:
 	int minKnightMoves(int x, int y) {
 		int result = 0;
-		x = abs(x), y = abs(y);
-		vector<vector<int>> grid(301, vector<int>(301, 10'000));
+		x = abs(x) + 1, y = abs(y) + 1;
+		vector<vector<int>> grid(302, vector<int>(302, 10'000));
 		queue<int> Q;
-		Q.push(0), Q.push(0);
-		grid[0][0] = 0;
+		Q.push(1), Q.push(1);
+		grid[1][1] = 0;
 		while (!Q.empty())
 		{
 			int a = Q.front(); Q.pop();
@@ -19,7 +19,7 @@ public:
 					if (abs(dx) + abs(dy) == 3)
 					{
 						int na = a + dx, nb = b + dy;
-						if (na >= 0 && na <= 300 && nb >= 0 && nb <= 300 && grid[na][nb] > s + 1)
+						if (na >= 0 && na <= 301 && nb >= 0 && nb <= 301 && grid[na][nb] > s + 1)
 						{
 							grid[na][nb] = s + 1;
 							Q.push(na); Q.push(nb);

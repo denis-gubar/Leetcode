@@ -1,19 +1,30 @@
 class Solution {
 public:
-    string findReplaceString( string S, vector<int>& indexes, vector<string>& sources, vector<string>& targets ) {
-        string result;
-        int N = S.size();
-        vector<string> A( N );
-        for (int i = 0; i < N; ++i)
-            A[i] = string( 1, S[i] );
-        for(int i = 0; i < indexes.size(); ++i)
-            if (S.substr( indexes[i], sources[i].size() ) == sources[i])
-            {
-                for (int j = 0; j < sources[i].size(); ++j)
-                    A[indexes[i] + j] = "";
-                A[indexes[i]] = targets[i];
-            }
-        result = accumulate( A.begin(), A.end(), string() );
-        return result;
-    }
+	string findReplaceString(string S, vector<int>& indexes, vector<string>& sources, vector<string>& targets) {
+		string result;
+		int N = indexes.size();
+		vector<int>	A(N);
+		iota(A.begin(), A.end(), 0);
+		sort(A.begin(), A.end(), [&indexes](int a, int b)
+			{
+				return indexes[a] > indexes[b];
+			});
+		int pos = 0;
+		while (pos < S.size())
+		{
+			if (!A.empty() && pos == indexes[A.back()])
+			{
+				int i = A.back(); A.pop_back();
+				if (pos + sources[i].size() <= S.size() && equal(sources[i].begin(), sources[i].end(), S.begin() + pos, S.begin() + pos + sources[i].size()))
+				{
+					result += targets[i];
+					pos += sources[i].size();
+					continue;
+				}
+			}
+			result += S[pos];
+			++pos;
+		}
+		return result;
+	}
 };

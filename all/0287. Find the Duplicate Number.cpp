@@ -1,23 +1,20 @@
 class Solution {
 public:
-    int findDuplicate( vector<int>& nums ) {
-        int n = nums.size();
-        int a = 1, b = n - 1;
-        while (a < b)
-        {
-            int median = (a + b) / 2;
-            int x = median - a + 1, y = b - median;
-            int lo = 0, hi = 0;
-            for (const auto& i : nums)
-            {
-                lo += (a <= i && i <= median);
-                hi += (median < i && i <= b);
-            }
-            if (lo > x || hi < y)
-                b = median;
-            else
-                a = median + 1;                
-        }
-        return a;
-    }
+	int findDuplicate(vector<int>& nums) {
+		int N = nums.size() - 1;
+		int a = 1, b = N;
+		while (a < b)
+		{
+			int m = (a + b) / 2;
+			int left_length = m - a + 1;
+			int count = 0;
+			for (int n : nums)
+				count += n >= a && n <= m;
+			if (left_length < count)
+				b = m;
+			else
+				a = m + 1;
+		}
+		return a;
+	}
 };

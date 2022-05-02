@@ -1,27 +1,43 @@
-/**
- * Definition for undirected graph.
- * struct UndirectedGraphNode {
- *     int label;
- *     vector<UndirectedGraphNode *> neighbors;
- *     UndirectedGraphNode(int x) : label(x) {};
- * };
- */
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> neighbors;
+    
+    Node() {
+        val = 0;
+        neighbors = vector<Node*>();
+    }
+    
+    Node(int _val) {
+        val = _val;
+        neighbors = vector<Node*>();
+    }
+    
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+*/
+
 class Solution {
 public:
-	UndirectedGraphNode *clone(UndirectedGraphNode *node) {
+	Node *clone(Node *node) {
 		if (!node)
 			return nullptr;
-		if (visited.find(node->label) != visited.end())
-			return visited[node->label];
-		UndirectedGraphNode* root = new UndirectedGraphNode(node->label);
-		visited[node->label] = root;
+		if (visited.find(node->val) != visited.end())
+			return visited[node->val];
+		Node* root = new Node(node->val);
+		visited[node->val] = root;
 		for (auto neighbor : node->neighbors)
 			root->neighbors.push_back(clone(neighbor));
 		return root;
 	}
-	UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
+	Node *cloneGraph(Node *node) {
 		visited.clear();
 		return clone(node);
 	}
-	unordered_map<int, UndirectedGraphNode*> visited;
+	unordered_map<int, Node*> visited;
 };

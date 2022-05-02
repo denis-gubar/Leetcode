@@ -1,55 +1,70 @@
 class Solution {
 public:
-    int find_position( const vector<string>& wordList, const string& word )
-    {
-        return distance( wordList.begin(), lower_bound( wordList.begin(), wordList.end(), word ) );
-    }
-    int ladderLength( string beginWord, string endWord, vector<string> wordList ) {
-        if (find( wordList.begin(), wordList.end(), endWord ) == wordList.end())
-            return 0;
-        if (find( wordList.begin(), wordList.end(), beginWord ) == wordList.end())
-            wordList.push_back( beginWord );
-        sort( wordList.begin(), wordList.end() );
-        int n = wordList.size();
-        vector<list<int>> connectivity( n );
-        for(int i = 0; i < n - 1; ++i)
-            for(int j = i + 1; j < n; ++j)
-            {
-                int diff_count = 0;
-                if (equal( wordList[i].begin(), wordList[i].end(), wordList[j].begin(), wordList[j].end(),
-                           [&diff_count]( char a, char b ) -> bool
-                           {
-                               diff_count += a != b;
-                               return  diff_count <= 1;
-                           }) )
-                {
-                    connectivity[i].push_front( j );
-                    connectivity[j].push_front( i );
-                }
-            }
-        vector<int> distances( n, INT_MAX );
-        int begin_position = find_position( wordList, beginWord );
-        int end_position = find_position( wordList, endWord );
-        distances[begin_position] = 1;
-        list<int> not_visited;
-        for (int i = 0; i < n; ++i)
-            not_visited.push_front( i );
-        for (int k = 0; k < n; ++k)
-        {
-            auto it = min_element( not_visited.begin(), not_visited.end(),
-                                   [&distances]( int a, int b ) -> bool
-                                   {
-                                       return distances[a] < distances[b] || distances[a] == distances[b] && a < b;
-                                   } );
-            int current_index = *it;
-            not_visited.erase( it );
-            int current_distance = distances[current_index];
-            for (const auto& connection : connectivity[current_index])
-                if (distances[connection] > current_distance + 1)
-                    distances[connection] = current_distance + 1;
-            if (distances[end_position] < INT_MAX)
-                return distances[end_position];
-        }
-        return 0;
-    }
+	struct Trie
+	{
+		unordered_map<char, Trie*> children;
+		int count = 0;
+		void add(string const& s, int id)
+		{
+			Trie* root = this;
+			++root->count;
+			for (char c : s)
+			{
+				if (root->children.find(c) == root->children.end())
+					root->children[c] = new Trie();
+				root = root->children[c];
+				++root->count;
+			}
+			root->count = id;
+		}
+	};
+	void calc(Trie* a, Trie* b, vector<vector<int>>& connectivity)
+	{
+		if (a->children.empty())
+		{
+			connectivity[a->count].push_back(b->count);
+			connectivity[b->count].push_back(a->count);
+			return;
+		}
+		for (auto [c, next] : a->children)
+			if (auto it = b->children.find(c); it != b->children.end())
+				calc(next, it->second, connectivity);
+	}
+	void traverse(Trie* root, vector<vector<int>>& connectivity)
+	{
+		if (root->children.empty() || root->count == 1)
+			return;
+		for (auto it = root->children.begin(); it != root->children.end(); ++it)
+		{
+			for (auto nextIt = next(it); nextIt != root->children.end(); ++nextIt)
+				calc(it->second, nextIt->second, connectivity);
+			traverse(it->second, connectivity);
+		}
+	}
+	int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+		Trie* root = new Trie();
+		int N = wordList.size();
+		wordList.push_back(beginWord);
+		for (int i = 0; i <= N; ++i)
+			root->add(wordList[i], i);
+		vector<vector<int>> connectivity(N + 1);
+		traverse(root, connectivity);
+		vector<int>	distances(N + 1);
+		distances[N] = 1;
+		queue<int> Q;
+		Q.push(N);
+		while (!Q.empty())
+		{
+			int V = Q.front(); Q.pop();
+			if (wordList[V] == endWord)
+				return distances[V];
+			for (int U : connectivity[V])
+				if (distances[U] == 0)
+				{
+					distances[U] = distances[V] + 1;
+					Q.push(U);
+				}
+		}
+		return 0;
+	}
 };

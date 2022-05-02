@@ -1,30 +1,29 @@
 class UndergroundSystem {
 public:
-	struct Visit
-	{
-		string stationName;
-		int time;
-	};
 	UndergroundSystem() {
 
 	}
 
 	void checkIn(int id, string stationName, int t) {
-		M[id] = { stationName, t };
+		running[id] = { stationName, t };
 	}
 
 	void checkOut(int id, string stationName, int t) {
-		string inName = M[id].first;
-		int inT = M[id].second;
-		V[{inName, stationName}].first += t - inT;
-		++V[{inName, stationName}].second;
+		auto it = running.find(id);
+		string startStation = it->second.first;
+		int startTime = it->second.second;
+		pair<int, int>& x = M[{startStation, stationName}];
+		x.first += t - startTime;
+		++x.second;
+		running.erase(it);
 	}
 
 	double getAverageTime(string startStation, string endStation) {
-		return 1.0 * V[{startStation, endStation}].first / V[{startStation, endStation}].second;
+		pair<int, int> const& x = M[{startStation, endStation}];
+		return 1.0 * x.first / x.second;
 	}
-	map<int, pair<string, int>> M;
-	map<pair<string, string>, pair<int, int>> V;
+	unordered_map<int, pair<string, int>> running;
+	map<pair<string, string>, pair<int, int>> M;
 };
 
 /**

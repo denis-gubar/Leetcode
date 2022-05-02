@@ -4,6 +4,17 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
@@ -34,12 +45,12 @@ public:
             if (root->left && root->right)
                 all_sums.push_back( root->val + left + right );
             result = *max_element( all_sums.begin(), all_sums.end() );
-            best_sum = max( best_sum, max( best_sum + left, best_sum + right ) );            
+            best_sum = max( { best_sum, best_sum + left, best_sum + right} );
         }
         return best_sum;
     }
     int maxPathSum( TreeNode* root ) {
-        result = INT_MIN;
+        result = root->val;
         sum( root );
         return result;
     }

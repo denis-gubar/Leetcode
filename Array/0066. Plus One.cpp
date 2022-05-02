@@ -1,16 +1,14 @@
 class Solution {
 public:
 	vector<int> plusOne(vector<int>& digits) {
-		reverse(digits.begin(), digits.end());
-		int n = digits.size();		
-        int i = 0;
-		for (; i < n && digits[i] == 9; ++i)
-			digits[i] = 0;
-        if (i < n)
-            ++digits[i];
-        else
-            digits.push_back(1);
-		reverse(digits.begin(), digits.end());
-        return digits;
+		vector<int>	result(digits);
+		int pos = result.size() - 1;
+		while (pos >= 0 && result[pos] == 9)
+			result[pos] = 0, --pos;
+		if (pos < 0)
+			result.insert(result.begin(), 1);
+		else
+			++result[pos];
+		return result;
 	}
 };

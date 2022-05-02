@@ -5,7 +5,7 @@ public:
 		reverse(num1.begin(), num1.end());
 		reverse(num2.begin(), num2.end());
 		int position = 0, extra = 0;
-		while (position < num1.size() || position < num2.size())
+		while (extra || position < num1.size() || position < num2.size())
 		{
 			int digit = extra;
 			if (position < num1.size())
@@ -17,8 +17,6 @@ public:
 			result += digit + '0';
             ++position;
 		}
-		if (extra)
-			result += extra + '0';
 		reverse(result.begin(), result.end());
 		return result;
 	}

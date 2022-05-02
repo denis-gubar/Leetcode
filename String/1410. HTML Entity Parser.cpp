@@ -3,7 +3,7 @@ public:
 	string entityParser(string text) {
 		string result;
 		vector<string> S{ "&quot;", "&apos;", "&amp;", "&gt;", "&lt;", "&frasl;" };
-		string s = "\"'&></";
+		string s = ""'&></";
 		for (int i = 0; i < text.size(); ++i)
 			if (text[i] != '&')
 				result += text[i];

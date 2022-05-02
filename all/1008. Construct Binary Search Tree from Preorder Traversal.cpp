@@ -9,19 +9,20 @@
  */
 class Solution {
 public:
-	TreeNode* bstFromPreorder(vector<int>::iterator a, vector<int>::iterator b)
+	TreeNode* calc(vector<int>::iterator first, vector<int>::iterator last)
 	{
-		if (a == b)
-			return nullptr;
-		TreeNode* root = new TreeNode(*a);
-		auto mid = a + 1;
-		while (mid != b && *mid < *a)
-			++mid;
-		root->left = bstFromPreorder(a + 1, mid);
-		root->right = bstFromPreorder(mid, b);
-		return root;
+		if (first == last) return nullptr;
+		TreeNode* result = new TreeNode(*first);
+		++first;
+		auto it = find_if(first, last, [result](int x)
+			{
+				return x > result->val;
+			});
+		result->left = calc(first, it);
+		result->right = calc(it, last);
+		return result;
 	}
 	TreeNode* bstFromPreorder(vector<int>& preorder) {
-		return bstFromPreorder(preorder.begin(), preorder.end());
+		return calc(preorder.begin(), preorder.end());
 	}
 };
