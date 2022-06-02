@@ -1,7 +1,7 @@
 class Solution {
 public:
 	int maxEnvelopes(vector<vector<int>>& envelopes) {
-		sort(envelopes.begin(), envelopes.end(), [](vector<int> a, vector<int> b)
+		sort(envelopes.begin(), envelopes.end(), [](vector<int> const& a, vector<int> const& b)
 			{
 				if (a[0] != b[0])
 					return a[0] < b[0];

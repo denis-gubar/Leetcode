@@ -5,7 +5,7 @@ public:
 		vector<int> visited(1 << k);
 		int total = 1 << k;
 		int current = 0;
-		for (int i = 0; i < k; ++i)
+		for (int i = 0; i < k && i < s.size(); ++i)
 		{
 			current <<= 1;
 			current += s[i] == '1';
