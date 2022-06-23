@@ -1,18 +1,25 @@
 class Solution {
 public:
-	int nthUglyNumber(int n) {
-		double maxUglyNumber = 2.13e9;
-		double lMax = log(maxUglyNumber);
-		double l2 = log(2.0);
-		double l3 = log(3.0);
-		double l5 = log(5.0);
-		vector<double> S;
-		for (int p2 = 0, p2e = lMax / l2; p2 <= p2e; ++p2)
-			for (int p3 = 0, p3e = (lMax - p2 * l2) / l3; p3 <= p3e; ++p3)
-				for (int p5 = 0, p5e = (lMax - p2 * l2 - p3 * l3) / l5; p5 <= p5e; ++p5)
-					S.push_back( p2 * l2 + p3 * l3 + p5 * l5);
-        sort(S.begin(), S.end());
-		int result = exp(S[n - 1]) + 0.5;
-		return result;
-	}
+    int nthUglyNumber(int n) {
+        vector<size_t> primes{2, 3, 5};        
+        size_t P = primes.size();
+        vector<int> A(P, -1);
+        vector<size_t> F{1};
+        F.reserve(n);
+        set<pair<size_t, size_t>> S;
+        for(size_t i = 0; i < P; ++i)
+            S.emplace(1, i);
+        --n;
+        while(n > 0)
+        {
+            for(auto it = S.lower_bound({F.back(), 0}); it != S.end() && it->first == F.back(); it = S.erase(it))
+            {
+                size_t const& i = it->second;                
+                S.emplace(F[++A[i]] * primes[i], i);                
+            }
+            F.push_back(S.begin()->first);
+            --n;
+        }
+        return F.back();
+    }
 };
