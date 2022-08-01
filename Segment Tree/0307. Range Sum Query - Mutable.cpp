@@ -1,50 +1,55 @@
 class NumArray {
 public:
-	NumArray(vector<int>& nums) {
-		sums.reserve(16);
-		sums.push_back(nums);
-		while (sums.back().size() > 1)
+	template<typename T>
+	struct FenwickTree
+	{
+		FenwickTree(size_t N) : N(N)
 		{
-			vector<int>& last = sums.back();			
-			vector<int> current;
-			for (int i = 0; i < last.size(); ++i)
-			{
-				if (i % 2 == 0)
-					current.push_back(last[i]);
-				else
-					current.back() += last[i];
-			}
-			sums.push_back(current);
+			tree.assign(N, {});
 		}
-        for(int level = 0; level < sums.size(); ++level)
-            sums[level].push_back(0);
-	}
-
-	void update(int index, int val) {
-		int delta = val - sums[0][index];
-		for (int level = 0; level < sums.size(); ++level)
-			sums[level][index >> level] += delta;
-	}
-
-	int sumRange(int left, int right) {
-		int result = 0;
-		int level = 0;
-		while (left < right)
+		FenwickTree(vector<T> const& A) : FenwickTree(A.size())
 		{
-			if (left % 2 == 1)
-				result -= sums[level][left - 1];
-			if (right % 2 == 0)
-				result -= sums[level][right + 1];
-			++level;
-			left >>= 1;
-			right >>= 1;
+			for (size_t position = 0; position < N; ++position)
+				add(position, A[position]);
 		}
-		result += sums[level][left];
-		return result;
-	}
-	vector<vector<int>> sums;
+		void add(size_t position, T value)
+		{
+			for (size_t x = position; x < N; x |= x + 1)
+				tree[x] += value;
+		}
+		// [0; position]
+		T sum(size_t position)
+		{
+			T result{};
+			for (size_t x = position; x > 0; x &= x - 1)
+				result += tree[x - 1];
+			return result;
+		}
+		// [left; right)
+		T sum(size_t left, size_t right)
+		{
+			return sum(right) - sum(left);
+		}
+		size_t N;
+		vector<T> tree;
+	}; ;
+
+    NumArray(vector<int>& nums): FT(nums), nums(nums) {
+        
+    }
+    
+    void update(int index, int val) {
+		int delta = val - nums[index];
+		nums[index] = val;
+		FT.add(index, delta);
+    }
+    
+    int sumRange(int left, int right) {
+		return FT.sum(left, right + 1);
+    }
+	FenwickTree<int> FT;
+	vector<int> nums;
 };
-
 
 /**
  * Your NumArray object will be instantiated and called as such:
