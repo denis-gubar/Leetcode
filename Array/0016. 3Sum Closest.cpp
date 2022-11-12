@@ -1,33 +1,32 @@
-struct comparator : binary_function< pair<int, int>, pair<int, int>, bool>
-{
-	comparator(int target): target(target) {}
-	bool operator() ( pair<int, int> a, pair<int, int> b ) const
-	{
-		return abs( a.first - target ) < abs( b.first - target );
-	}
-private:
-	int target;
-};
 class Solution {
 public:
-	int threeSumClosest( vector<int>& nums, int target ) {
-		int n = nums.size();
-		map<int, int> A, B;
-		for (int i = 0; i < n; ++i)
-			if (A.find( nums[i] ) == A.end() || A[nums[i]] > i)
-				A[nums[i]] = i;
-		for (int k = 0; k < 2; ++k)
-		{
-			A.swap( B );
-			A.clear();
-			for (map<int, int>::iterator it = B.begin(); it != B.end(); ++it)
-				for (int i = it->second + 1; i < n; ++i)
-				{
-					int sum = it->first + nums[i];
-					if (A.find( sum ) == A.end() || A[sum] > i)
-						A[sum] = i;
-				}
-		}
-		return min_element(A.begin(), A.end(), comparator(target))->first;
-	}
+    int threeSumClosest(vector<int>& nums, int target) {
+        int N = nums.size();
+        constexpr int INF = 1'000'000;
+        for (int& x : nums)
+            x += 1'000;
+        target += 3'000;
+        sort(nums.begin(), nums.end());
+        vector<int> A(6'001, INF), B(6'001, INF);
+        for (int i = 0; i < N; ++i)
+            if (A[nums[i]] == INF)
+                A[nums[i]] = i;
+        for (int k = 0; k < 2; ++k)
+        {
+            A.swap(B);
+            A.assign(6'001, INF);
+            for (int x = 0; x < 6'001; ++x)
+                for (int i = B[x] + 1; i < N; ++i)
+                {
+                    int sum = x + nums[i];
+                    if (A[sum] > i)
+                        A[sum] = i;
+                }
+        }
+        int result = INF;
+        for (int x = 0; x < 6'001; ++x)
+            if (A[x] != INF && abs(result - target) > abs(x - target))
+                result = x;                
+        return result - 3'000;
+    }
 };

@@ -5,11 +5,11 @@ public:
 		M.clear();
 	}
 
-	void set(string key, string value, int timestamp) {
+	void set(string const& key, string const& value, int timestamp) {
 		M[key].push_back({ timestamp, value });
 	}
 
-	string get(string key, int timestamp) {
+	string get(string const& key, int timestamp) {
 		if (M.find(key) == M.end())
 			return "";
 		auto it = lower_bound(M[key].begin(), M[key].end(), pair<int, string>{ timestamp, "~" });
@@ -17,7 +17,7 @@ public:
             return "";
 		return (--it)->second;
 	}
-	map<string, vector<pair<int, string>>> M;
+	unordered_map<string, vector<pair<int, string>>> M;
 };
 /**
  * Your TimeMap object will be instantiated and called as such:
