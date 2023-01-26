@@ -20,7 +20,7 @@ public:
 			node = P.first;
 			if (node)
 			{
-				bool isLeftSubtreeProcessed = P.second;
+				bool const& isLeftSubtreeProcessed = P.second;
 				if (!isLeftSubtreeProcessed)
 				{
 					result.push_back(node->val);
