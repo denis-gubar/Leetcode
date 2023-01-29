@@ -1,48 +1,85 @@
 class SummaryRanges {
 public:
-	/** Initialize your data structure here. */
-	SummaryRanges() {
-		S.clear();
-	}
-
-	void addNum(int val) {
-		auto it = S.lower_bound(val * 2 - 1);
-		if (it != S.end())
-		{
-			if (*it == val * 2 - 1)
-			{
-				S.erase(it);
-				if (S.find(val * 2 + 2) == S.end())
-					S.insert(val * 2 + 1);
-				else
-					S.erase(val * 2 + 2);
-				return;
-			}
-			else if (*it % 2 || *it == val * 2)
-				return;
-			S.insert(val * 2);
-			if (S.find(val * 2 + 2) == S.end())
-				S.insert(val * 2 + 1);
-			else
-				S.erase(val * 2 + 2);
-		}
-		else
-		{
-			S.insert(val * 2); S.insert(val * 2 + 1);
-		}
-	}
-
-	vector<vector<int>> getIntervals() {
-		vector<vector<int>> result;
-		for (auto it = S.begin(); it != S.end(); ++it)
-		{
-			int a = *it / 2; ++it;
-			int b = *it / 2;
-			result.push_back({ a, b });
-		}
-		return result;
-	}
-	set<int> S;
+    template<typename T>
+    struct IntervalTree
+    {
+        void update(T first, T last, bool isAdd)
+        {
+            auto it = points.lower_bound({ first, false });
+            if (it != points.end() && it->first == first)
+            {
+                if (it->second == isAdd)
+                    it = points.erase(it);
+                else
+                    ++it;
+            }
+            else
+            {
+                if (it == points.begin() || prev(it)->second == isAdd)
+                {
+                    it = points.insert({ first, !isAdd }).first;
+                    ++it;
+                }
+            }
+            while (true)
+            {
+                if (it == points.end() || it->first > last)
+                {
+                    if ((it == points.end() || !it->second) == isAdd)
+                        it = points.insert({ last, isAdd }).first;
+                    break;
+                }
+                if (it->first < last)
+                    it = points.erase(it);
+                else
+                {
+                    if (it->second != isAdd)
+                        it = points.erase(it);
+                    else
+                        ++it;
+                }
+            }
+        }
+        void add(T first, T last)
+        {
+            update(first, last, true);
+        }
+        void remove(T first, T last)
+        {
+            update(first, last, false);
+        }
+        void print()
+        {
+            for (pair<T, bool> x : points)
+                if (!x.second)
+                    cout << x.first << ' ';
+                else
+                    cout << "- " << x.first << '
+';
+            cout << string(40, '-') << '
+';
+        }
+        set<pair<T, bool>> points;
+    };
+    SummaryRanges() {
+        
+    }
+    
+    void addNum(int val) {
+        IT.add(val, val + 1);
+    }
+    
+    vector<vector<int>> getIntervals() {
+        vector<vector<int>> result;
+        for (auto it = IT.points.begin(); it != IT.points.end(); ++it)
+        {
+            result.push_back({ it->first, it->first });
+            ++it;
+            result.back().back() = it->first - 1;
+        }
+        return result;
+    }
+    IntervalTree<int> IT;
 };
 
 /**
