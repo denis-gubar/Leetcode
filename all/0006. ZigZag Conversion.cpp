@@ -25,17 +25,12 @@ public:
 				--x; ++y; ++k;
 			}
 		}
-		cout << k << endl;
 		vector<pair<int, int>> Ranks;
 		for (int i = 0; i < n; ++i)
-		{
 			Ranks.push_back(make_pair(W[i], i));
-		}
 		sort( Ranks.begin(), Ranks.end() );
 		for (int i = 0; i < n; ++i)
-		{
 			result[i] = s[Ranks[i].second];
-		}
 		return result;
 	}
 };
