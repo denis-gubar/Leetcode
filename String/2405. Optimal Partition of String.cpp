@@ -2,17 +2,16 @@ class Solution {
 public:
     int partitionString(string s) {
         int result = 1;
-        int N = s.size();
-        vector<int> M(26);
+        int M = 0;
         for (char c : s)
         {
             int x = c - 'a';
-            if (M[x] > 0)
+            if (M & (1 << x))
             {
-                M.assign(26, 0);
+                M = 0;
                 ++result;
             }
-            M[x] = 1;
+            M |= 1 << x;
         }
         return result;
     }

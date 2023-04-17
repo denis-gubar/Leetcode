@@ -1,14 +1,17 @@
+static int A[2'001];
+static int F[2'001];
 class Solution {
 public:
     int maxValueOfCoins(vector<vector<int>>& piles, int k) {
         int result = 0;
         int N = piles.size();
-        vector<int> F(k + 1);
+        memset(F, 0, sizeof(F));        
+        A[0] = 0;
         for (int i = 0; i < N; ++i)
-        {            
-            int M = min<int>(k, piles[i].size());
-            vector<int> A(M + 1);
-            for (int j = 0; j < M; ++j)
+        {
+            int P = piles[i].size();
+            int M = min(k, P);
+            for (int j = 0; j < P; ++j)
                 A[j + 1] = A[j] + piles[i][j];
 			for (int level = k; level >= 0; --level)
                 for (int j = 0; j <= M && j <= level; ++j)

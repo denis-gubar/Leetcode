@@ -48,7 +48,7 @@ public:
 		UnionFind unionFind(n);
 		for (vector<int> const& connection : connections)
 			unionFind.checkedUnite(connection[0], connection[1]);
-		set<int> S;
+		unordered_set<int> S;
 		for (int i = 0; i < n; ++i)
 			S.insert(unionFind.root(i));
 		return S.size() - 1;
