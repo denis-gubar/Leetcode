@@ -1,3 +1,4 @@
+static short F[501][501];
 class Solution {
 public:
 	int calc(string const& s, int start, int length)
@@ -14,8 +15,7 @@ public:
 	}
 	int minInsertions(string s) {
 		int N = s.size();
-		F = vector<vector<int>>(N, vector<int>(N + 1, -1));
+		memset(F, -1, sizeof(F));
 		return calc(s, 0, N);
-	}
-	vector<vector<int>> F;
+	}	
 };

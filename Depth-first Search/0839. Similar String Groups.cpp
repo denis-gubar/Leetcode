@@ -2,6 +2,8 @@ class Solution {
 public:
     int numSimilarGroups( vector<string>& A ) {
         int result = 0;
+        sort(A.begin(), A.end());
+        A.resize(unique(A.begin(), A.end()) - A.begin());
         int n = A.size(), m = A[0].size();
         vector<vector<int>> connectivity( n );
         for(int i = 0; i < n; ++i)
