@@ -1,3 +1,4 @@
+static int F[50'003];
 class Solution {
 public:
 	string stoneGameIII(vector<int>& stoneValue) {
@@ -5,7 +6,7 @@ public:
 		stoneValue.push_back(0);
 		stoneValue.push_back(0);
 		stoneValue.push_back(0);
-		vector<int> F(N + 3);
+		F[N] = F[N + 1] = F[N + 2] = 0;
 		for (int i = N - 1; i >= 0; --i)
 		{
 			F[i] = max({ -F[i + 1] + stoneValue[i],

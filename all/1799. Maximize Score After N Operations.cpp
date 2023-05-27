@@ -1,9 +1,5 @@
 class Solution {
 public:
-	template<typename T> T gcd(T a, T b)
-	{
-		while (a && b) if (a > b) a %= b; else b %= a; return a + b;
-	}
 	void calc(vector<int>& nums, int mask, int i)
 	{
 		if (i > N)
