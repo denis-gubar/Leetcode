@@ -1,20 +1,33 @@
+static bool isVowel(char c)
+{
+    return "aeiou"s.find(c) != string::npos;
+}
 class Solution {
 public:
-	bool isvowel(char c)
-	{
-		return "aeiou"s.find(c) != string::npos;
-	}
-	int maxVowels(string s, int k) {
-		int result = 0, current = 0;
-		for (int i = 0; i < k; ++i)
-			current += isvowel(s[i]);
-		result = current;
-		for (int i = k; i < s.size(); ++i)
-		{
-			current += isvowel(s[i]);
-			current -= isvowel(s[i - k]);
-			result = max(result, current);
-		}
-		return result;
-	}
+    int maxVowels(string s, int k) {
+        int result = 0;
+        int sum = 0;
+        int N = s.size();
+        auto add = [&sum](char x)
+        {
+            sum += isVowel(x);
+        };
+        auto remove = [&sum](char x)
+        {
+            sum -= isVowel(x);
+        };
+        auto process = [&sum, &result]()
+        {
+            result = max(result, sum);
+        };
+        for (int i = 0; i < N; ++i)
+        {
+            add(s[i]);
+            if (i >= k)
+                remove(s[i - k]);
+            if (i >= k - 1)
+                process();
+        }
+        return result;
+    }
 };

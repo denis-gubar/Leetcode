@@ -1,27 +1,25 @@
 class Solution {
 public:
-	using Iter = vector<int>::iterator;
-	int calc(int a, int b, Iter first, Iter last, unordered_map<long long, int>& M)
+	int calc(int a, int b, vector<int>& cuts)
 	{
-		long long hash = a * 1'000'000LL + b;
+		short hash = a * 105 + b;
 		if (M.find(hash) == M.end())
 		{
-			if (first == last) return M[hash] = 0;
-			Iter mid = first;
-			int result = b - a + calc(a, *mid, first, mid, M) + calc(*mid, b, mid + 1, last, M);
-			++mid;
-			while (mid != last)
-			{
-				result = min(result, b - a + calc(a, *mid, first, mid, M) + calc(*mid, b, mid + 1, last, M));
-				++mid;
-			}
+			if (a + 1 == b) return M[hash] = 0;
+			int result = 1 << 28;
+			for(int mid = a + 1; mid < b; ++mid)
+				result = min(result, cuts[b] - cuts[a] + calc(a, mid, cuts) + calc(mid, b, cuts));
 			M[hash] = result;
 		}
 		return M[hash];
 	}
+	unordered_map<short, int> M;
 	int minCost(int n, vector<int>& cuts) {
-		sort(cuts.begin(), cuts.end());
-		unordered_map<long long, int> M;
-		return calc(0, n, cuts.begin(), cuts.end(), M);
+		int N = cuts.size();
+		M.clear();
+		cuts.push_back(0);
+		cuts.push_back(n);
+		sort(cuts.begin(), cuts.end());		
+		return calc(0, N + 1, cuts);
 	}
 };
