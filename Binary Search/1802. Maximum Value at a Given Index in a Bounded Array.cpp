@@ -16,6 +16,6 @@ public:
 			else
 				b = m;
 		}
-		return a + 1;
+		return b;
 	}
 };

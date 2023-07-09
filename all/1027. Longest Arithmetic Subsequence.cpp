@@ -1,30 +1,18 @@
 class Solution {
 public:
 	int longestArithSeqLength(vector<int>& A) {
-		int result = 2;
-		vector<vector<int>> M(10001);
-		for (int i = 0; i < A.size(); ++i)
-			M[A[i]].push_back(i);
-		for(int a = 0; a < A.size(); ++a)
-			for (int B = a + 1; B < A.size(); ++B)
+		int result = 0;
+		unordered_map<int, array<int, 1000>> M;
+		int N = A.size();
+		for (int i = 0; i < N; ++i)
+			for (int j = i + 1; j < N; ++j)
 			{
-				int b = B;
-				int delta = A[b] - A[a];
-				int k = 2;
-				while (A[b] + delta >= 0 && A[b] + delta <= 10000 &&
-					!M[A[b] + delta].empty())
-				{
-					int x = A[b] + delta;
-					auto it = upper_bound(M[x].begin(), M[x].end(), b);
-					if (it != M[x].end())
-					{
-						++k; b = *it;
-						result = max(result, k);
-					}
-					else
-						break;
-				}				
+				int delta = A[j] - A[i];
+				if (M.find(delta) == M.end())
+					M[delta].fill(0);
+				M[delta][j] = max(M[delta][j], M[delta][i] + 1);
+				result = max(result, M[delta][j]);
 			}
-		return result;
+		return result + 1;
 	}
 };

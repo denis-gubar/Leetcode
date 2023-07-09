@@ -9,7 +9,7 @@ public:
 		for (int i = 0; i < text.size(); ++i)
 			for (string const& word : words)
 				if (text.substr(i, word.size()) == word)
-                    result.push_back({ i, i + word.size() - 1 });
+                    result.push_back({ i, i + static_cast<int>(word.size()) - 1 });
 		return result;
 	}
 };
