@@ -5,10 +5,7 @@ public:
 		unordered_map<int, int> M;
         M.reserve(arr.size());
 		for (int a : arr)
-		{
-			M[a] = max(M[a], 1 + M[a - difference]);
-			result = max(result, M[a]);
-		}		
+			result = max(result, M[a] = max(M[a], 1 + M[a - difference]));
 		return result;
 	}
 };

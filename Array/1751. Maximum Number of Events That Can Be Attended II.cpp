@@ -25,6 +25,7 @@ public:
 			});
 
 		vector<vector<int>> F({ { 0 } });
+		F.reserve(keys.size());
 		int last = 0;
 		for (int i = 1; i <= keys.size(); ++i)
 		{

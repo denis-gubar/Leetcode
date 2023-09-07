@@ -1,32 +1,25 @@
 class Solution {
 public:
-	bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-		vector<unordered_set<int>> connectivity(numCourses);
-		vector<unordered_set<int>> inverse(numCourses);
-		for (vector<int> const& prerequisite : prerequisites)
-		{
-			connectivity[prerequisite[0]].insert(prerequisite[1]);
-			inverse[prerequisite[1]].insert(prerequisite[0]);
-		}
-		set<pair<int, int>> Q;
-		for (int i = 0; i < numCourses; ++i)
-			Q.emplace(connectivity[i].size(), i);
-		while (!Q.empty())
-		{
-			pair<int, int> P = *Q.begin(); Q.erase(Q.begin());
-			if (P.first > 0)
-				return false;
-			int const& V = P.second;
-			for (int U : inverse[V])
-			{
-				pair<int, int> p{ connectivity[U].size(), U };
-				Q.erase(p);
-				connectivity[U].erase(V);
-				--p.first;
-				Q.insert(p);				
-			}
-			inverse[V].clear();
-		}
-		return true;
-	}
+    int N;
+    vector<vector<int>> connectivity;
+    vector<bool> visited, safe;
+    bool calc(int V)
+    {
+        bool result = visited[V] = true;
+        for (int U : connectivity[V])
+            result &= visited[U] ? safe[U] : calc(U);
+        return safe[V] = result;
+    }
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        N = numCourses;
+        connectivity = vector<vector<int>>(N);
+        visited = vector<bool>(N);
+        safe = vector<bool>(N);
+        for (vector<int> const& p : prerequisites)
+            connectivity[p[1]].push_back(p[0]);
+        for (int V = 0; V < N; ++V)
+            if (!visited[V] && !calc(V) || !safe[V])
+                return false;
+        return true;
+    }
 };
