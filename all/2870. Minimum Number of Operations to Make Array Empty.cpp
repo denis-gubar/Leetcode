@@ -3,7 +3,7 @@ public:
     int minOperations(vector<int>& nums) {
         int N = nums.size();
         int result = 0;
-        map<int, int> M;
+        unordered_map<int, int> M;
         for (int x : nums)
             ++M[x];
         for (auto [key, value] : M)
