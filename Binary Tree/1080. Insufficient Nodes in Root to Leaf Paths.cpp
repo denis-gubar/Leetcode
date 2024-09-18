@@ -1,47 +1,34 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
 class Solution {
 public:
-	int calc(TreeNode* root, int limit)
-	{
-		if (!root)
-			return 0;
-		limit += root->val;
-		int MaxSum = 0;
-		if (!root->left && !root->right)
-			MaxSum = limit;
-		else
-		{
-			int left = root->left ? calc(root->left, limit) : -1;
-			if (left < 0)
-			{
-				Delete(root->left);
-				root->left = nullptr;
-			}
-			int right = root->right ? calc(root->right, limit) : -1;
-			if (right < 0)
-			{
-				Delete(root->right);
-				root->right = nullptr;
-			}
-			MaxSum = max(left, right);
-		}
-		return MaxSum;
-	}
-	static void Delete(TreeNode* root)
-	{
-		if (!root)
-			return;
-		if (root->left)
-			Delete(root->left);
-		if (root->right)
-			Delete(root->right);
-		delete root;
-	}
-	TreeNode* sufficientSubset(TreeNode* root, int limit) {		
-		if (calc(root, -limit) < 0)
-		{
-		//	Delete(root);
-			return nullptr;
-		}
-		return root;
-	}
+    long long const INF = 1LL << 50;
+    int limit;
+    pair<TreeNode*, long long> calc(TreeNode* root, long long total)
+    {
+        if (!root)
+            return { nullptr, -INF };
+        if (!root->left && !root->right)
+            return { total + root->val < limit ? nullptr : root, root->val };
+        pair<TreeNode*, long long> left = calc(root->left, total + root->val);
+        root->left = left.first;
+        pair<TreeNode*, long long> right = calc(root->right, total + root->val);
+        root->right = right.first;
+        if (!left.first && !right.first)
+            return { nullptr, max(left.second, right.second) + root->val };
+        return {root, max(left.second, right.second) + root->val };        
+    }
+    TreeNode* sufficientSubset(TreeNode* root, int limit) {
+        this->limit = limit;
+        return calc(root, 0LL).first;
+    }
 };

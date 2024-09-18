@@ -4,6 +4,7 @@ public:
 		vector<long long> A, B{ 0LL };
 		int MOD = 1'000'000'007;
 		A.reserve(n * (n + 1) / 2);
+        B.reserve(n * (n + 1) / 2);
 		for (int a = 0; a < n; ++a)
 			for (int b = a, sum = 0; b < n; ++b)
 				A.push_back(sum += nums[b]);

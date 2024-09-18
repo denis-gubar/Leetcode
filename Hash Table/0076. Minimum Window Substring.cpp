@@ -1,7 +1,7 @@
 class Solution {
 public:
-	string minWindow(string s, string t) {
-		string result;
+	string minWindow(string_view s, string_view t) {
+		string_view result;
 		vector<int> counts(128), limits(128);
 		for (int c : t)
 			++limits[c];
@@ -22,6 +22,6 @@ public:
 				++distinctCount;
 			++b;
 		}
-		return result;
+		return static_cast<string>(result);
 	}
 };

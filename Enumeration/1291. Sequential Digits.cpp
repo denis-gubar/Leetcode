@@ -1,8 +1,10 @@
-class Solution {
-public:
-	vector<int> sequentialDigits(int low, int high) {
-		vector<int> result;
-		vector<int> seqDigits;
+static vector<int> seqDigits;
+static bool isInit = false;
+static void init()
+{
+    if (!isInit)
+    {
+        isInit = true;
 		for (int n = 2; n < 10; ++n)
 			for (int k = 1; k + n <= 10; ++k)
 			{
@@ -12,6 +14,13 @@ public:
 				seqDigits.push_back(x);
 			}
 		sort(seqDigits.begin(), seqDigits.end());
+    }
+}
+class Solution {
+public:
+	vector<int> sequentialDigits(int low, int high) {
+		vector<int> result;
+        init();		
 		copy(lower_bound(seqDigits.begin(), seqDigits.end(), low),
 			lower_bound(seqDigits.begin(), seqDigits.end(), high + 1),
 			back_inserter(result));

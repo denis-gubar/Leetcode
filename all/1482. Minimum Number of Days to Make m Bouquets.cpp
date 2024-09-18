@@ -19,7 +19,7 @@ public:
 	}
 	int minDays(vector<int>& bloomDay, int m, int k) {
 		int N = bloomDay.size();
-		if (m * k > N)
+		if (1LL * m * k > N)
 			return -1;
 		int INF = 1'000'000'001;
 		vector<int>	A(bloomDay);

@@ -1,31 +1,49 @@
 class Solution {
 public:
-	void calc(int root, vector<int> const& leftChild, vector<int> const& rightChild, vector<set<int>>& visited)
-	{
-		if (root == -1) return;
-		if (leftChild[root] != -1)
-		{
-			if (visited[leftChild[root]].insert(root).second)
-			    calc(leftChild[root], leftChild, rightChild, visited);
-		}
-		if (rightChild[root] != -1)
-		{
-			if (visited[rightChild[root]].insert(root).second)
-			    calc(rightChild[root], leftChild, rightChild, visited);
-		}
-	}
-	bool validateBinaryTreeNodes(int n, vector<int>& leftChild, vector<int>& rightChild) {
-		vector<set<int>> visited(n);
-		vector<int> target(n, 1), v;
-		target[0] = 0;
-		for (int i = 0; i < n; ++i)
-            if (visited[i].empty())
-			    calc(i, leftChild, rightChild, visited);
-        for(auto const& vis: visited)
-            v.push_back(vis.size());
-		sort(v.begin(), v.end());
-        for(int i: v)
-            cout << i << ' ';
-		return v == target;
-	}
+    enum struct Colors
+    {
+        WHITE=0,
+        GREY,
+        BLACK
+    };
+    vector<Colors> colors;
+    bool calc1(vector<int>& leftChild, vector<int>& rightChild, int V)
+    {
+        if (V == -1)
+            return true;
+        if (colors[V] == Colors::WHITE)
+        {
+            colors[V] = Colors::GREY;
+            return calc1(leftChild, rightChild, leftChild[V]) &&
+                calc1(leftChild, rightChild, rightChild[V]);
+        }
+        return colors[V] == Colors::BLACK;
+    }
+    void calc2(vector<int>& leftChild, vector<int>& rightChild, int V)
+    {
+        if (V == -1) return;
+        if (colors[V] == Colors::GREY)
+        {
+            colors[V] = Colors::BLACK;
+            calc2(leftChild, rightChild, leftChild[V]);
+            calc2(leftChild, rightChild, rightChild[V]);
+        }
+    }
+    bool validateBinaryTreeNodes(int N, vector<int>& leftChild, vector<int>& rightChild) {
+        colors = vector<Colors>(N);
+        for (int V = 0; V < N; ++V)
+            if (!calc1(leftChild, rightChild, V))
+                return false;
+            else
+                calc2(leftChild, rightChild, V);
+        vector<bool> isRoot(N, true);
+        for (int V = 0; V < N; ++V)
+        {
+            if (leftChild[V] != -1)
+                isRoot[leftChild[V]] = false;
+            if (rightChild[V] != -1)
+                isRoot[rightChild[V]] = false;
+        }
+        return accumulate(isRoot.begin(), isRoot.end(), 0) == 1;
+    }
 };

@@ -1,9 +1,10 @@
+static long long F[51][52][101];
 class Solution {
 public:
 	int const MOD = 1'000'000'007;
 	int numOfArrays(int n, int m, int k) {
 		if (k > m) return 0;
-		vector<vector<vector<long long>>> F(n + 1, vector<vector<long long>>(k + 2, vector<long long>(m + 1)));
+		memset(F, 0, sizeof(F));
 		for (int j = 1; j <= m; ++j)
 			F[1][1][j] = 1;
 		for (int i = 1; i < n; ++i)
@@ -22,6 +23,6 @@ public:
 							F[i + 1][j][z] %= MOD;
 						}
 					}
-		return accumulate(F[n][k].begin(), F[n][k].end(), 0LL) % MOD;
+		return accumulate(&F[n][k][0], &F[n][k][m + 1], 0LL) % MOD;
 	}
 };

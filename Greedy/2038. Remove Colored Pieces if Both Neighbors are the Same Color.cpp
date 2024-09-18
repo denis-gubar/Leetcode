@@ -1,36 +1,23 @@
 class Solution {
 public:
 	bool winnerOfGame(string colors) {
-		int N = colors.size();
-		int A = 0, B = 0;
-		int size = 0;
-		for (char c : colors)
-		{
-			if (c == 'A')
-				++size;
-			else
+		colors += '#';
+		auto calc = [&colors](char t) -> int
 			{
-				if (size > 2)
-					A += size - 2;
-				size = 0;
-			}
-		}
-		if (size > 2)
-			A += size - 2;
-		size = 0;
-		for (char c : colors)
-		{
-			if (c == 'B')
-				++size;
-			else
-			{
-				if (size > 2)
-					B += size - 2;
-				size = 0;
-			}
-		}
-		if (size > 2)
-			B += size - 2;
-		return A > B;
+				int result = 0, size = 0;
+				for (char c : colors)
+				{
+					if (c == t)
+						++size;
+					else
+					{
+						if (size > 2)
+							result += size - 2;
+						size = 0;
+					}
+				}
+				return result;
+			};
+		return calc('A') > calc('B');
 	}
 };

@@ -3,10 +3,15 @@ public:
     bool calc( const vector<vector<int>>& A, int x, int y )
     {
         int S = A[x][y] + A[x + 1][y + 1] + A[x + 2][y + 2];
+        int mask = 0;
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 3; ++j)
                 if (A[x + i][y + j] < 1 || A[x + i][y + j] > 9)
                     return false;
+                else
+                    mask |= 1 << (A[x + i][y + j] - 1);
+        if (mask != 511)
+            return false;
         for (int i = 0; i < 3; ++i)
             if (A[x + i][y] + A[x + i][y + 1] + A[x + i][y + 2] != S)
                 return false;

@@ -1,12 +1,11 @@
 class Solution {
 public:
-	int findSpecialInteger(vector<int>& arr) {
-		map<int, int> M;
-		for (int a : arr)
-			++M[a];
-		for (auto m : M)
-			if (m.second * 4 > arr.size())
-				return m.first;
-		return -1;
-	}
+    int findSpecialInteger(vector<int>& arr) {
+        int N = arr.size();
+        int M = N / 4;
+        for(int i = 0; i + M < N; ++i)
+            if (arr[i + M] == arr[i])
+                return arr[i];
+        return -1;
+    }
 };

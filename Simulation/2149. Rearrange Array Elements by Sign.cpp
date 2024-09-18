@@ -5,6 +5,9 @@ public:
         int N = nums.size();
         vector<int> negatives;
         vector<int> positives;
+        result.reserve(N);
+        negatives.reserve(N);
+        positives.reserve(N);
         for (int x : nums)
             if (x > 0)
                 positives.push_back(x);

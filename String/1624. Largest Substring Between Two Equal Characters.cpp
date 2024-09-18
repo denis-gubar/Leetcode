@@ -4,7 +4,8 @@ public:
 		int result = -1;
 		vector<int>	A(256, -1);
 		vector<int>	B(256);
-		for (int i = 0; i < s.size(); ++i)
+        int N = s.size();
+		for (int i = 0; i < N; ++i)
 		{
 			char x = s[i];
 			if (A[x] >= 0)

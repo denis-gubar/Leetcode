@@ -7,7 +7,7 @@ public:
 		{
 			if (s[i] % 2 == i % 2)
 				++a;
-			if (s[i] % 2 == (i + 1) % 2)
+			else
 				++b;
 		}
 		return min(a, b);

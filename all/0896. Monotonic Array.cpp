@@ -1,10 +1,6 @@
 class Solution {
 public:
-	bool isMonotonic(vector<int>& A) {
-		vector<int> B(A);
-		sort(B.begin(), B.end());
-		vector<int> C(A);
-		sort(C.begin(), C.end(), greater<int>());
-		return A == B || C == A;
-	}
+    bool isMonotonic(vector<int>& nums) {
+        return is_sorted(nums.begin(), nums.end()) || is_sorted(nums.rbegin(), nums.rend());
+    }
 };

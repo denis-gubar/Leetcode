@@ -1,34 +1,43 @@
 class Solution {
 public:
-    map<pair<int, int>, pair<int, int>> M;
     vector<vector<int>> connectivity;
-    pair<int, int> calc( int v, int u )
+    vector<int> result, childrenCount, treeSum;
+    int N;
+    void calc(int V, int P)
     {
-        if (M.find( { v, u } ) != M.end())
-            return M[{v, u}];
-        pair<int, int> result{ 1, 1 };
-        for (int x : connectivity[u])
-            if (x != v)
+        for(int U : connectivity[V])
+            if (U != P)
             {
-                pair<int, int> current = calc( u, x );
-                result.second += current.second;
-                result.first += current.first + current.second;
+                calc(U, V);
+                childrenCount[V] += childrenCount[U];
+                treeSum[V] += treeSum[U] + childrenCount[U];
             }
-        return M[{v, u}] = result;
     }
-    vector<int> sumOfDistancesInTree( int N, vector<vector<int>>& edges ) {
-        vector<int> result( N );
-        connectivity = vector<vector<int>>( N );
-        M.clear();
-        for (int i = 0; i + 1 < N; ++i)
+    void calc2(int V, int P)
+    {
+        for (int U : connectivity[V])
+            if (U != P)
+            {
+                result[U] += result[V] - childrenCount[U] + N - childrenCount[U];
+                calc2(U, V);
+            }
+    }
+    vector<int> sumOfDistancesInTree(int N, vector<vector<int>>& edges) {
+        this->N = N;
+        result = vector<int>(N);
+        connectivity = vector<vector<int>>(N);
+        childrenCount = vector<int>(N, 1);
+        treeSum = vector<int>(N);
+        for (int i = 0; i < N - 1; ++i)
         {
-            int v = edges[i][0], u = edges[i][1];
-            connectivity[v].push_back( u );
-            connectivity[u].push_back( v );
+            int const& V = edges[i][0];
+            int const& U = edges[i][1];
+            connectivity[V].push_back(U);
+            connectivity[U].push_back(V);
         }
-        for (int v = 0; v < N; ++v)
-            for (int u : connectivity[v])
-                result[v] += calc( v, u ).first;
+        calc(0, -1);
+        result[0] = treeSum[0];
+        calc2(0, -1);
         return result;
     }
 };

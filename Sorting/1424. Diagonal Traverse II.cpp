@@ -4,6 +4,7 @@ public:
 		vector<int> result;
 		int N = nums.size();
 		vector<pair<int, int>> A;
+    A.reserve(100'000);
 		for (int i = 0; i < N; ++i)
 			for (int j = 0; j < nums[i].size(); ++j)
 				A.push_back({i + j, -i});

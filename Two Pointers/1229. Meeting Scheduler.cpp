@@ -2,6 +2,7 @@ class Solution {
 public:
 	vector<int> minAvailableDuration(vector<vector<int>>& slots1, vector<vector<int>>& slots2, int duration) {
 		vector<pair<int, int>> A;
+        A.reserve(2 * (slots1.size() + slots2.size()));
 		for (auto& x : slots1)
 		{
 			A.push_back({ x[0], 1 });

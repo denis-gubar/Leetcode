@@ -1,42 +1,44 @@
+static int connectivity[26];
+static int& N = connectivity[0];
+static int gold[26];
+static const array dx{ -1, 0, 1, 0 };
+static const array dy{ 0, -1, 0, 1 };
 class Solution {
 public:
-	vector<int> dx{ 0, 1, 0, -1 };
-	vector<int> dy{ 1, 0, -1, 0 };
-	void calc(vector<vector<int>>& M, vector<vector<int>> grid, int x, int y, int& current, int& result)
-	{
-		for (int z = 0; z < 4; ++z)
-		{
-			int nx = dx[z] + x;
-			int ny = dy[z] + y;
-			if (nx >= 0 && nx < grid.size() && ny >= 0 && ny < grid[0].size() && grid[nx][ny] && !M[nx][ny])
-			{
-				current += grid[nx][ny];
-                result = max(result, current);
-				M[nx][ny] = 1;
-				calc(M, grid, nx, ny, current, result);
-				M[nx][ny] = 0;
-				current -= grid[nx][ny];
-			}
-		}
-	}
-	int getMaximumGold(vector<vector<int>>& grid) {
-		int result = 0;
-		vector<pair<int, int>> goldPositions;
-		vector<vector<int>> M(grid.size(), vector<int>(grid[0].size(), 0));
-		for(int i = 0; i < grid.size(); ++i)
-			for(int j = 0; j < grid[0].size(); ++j)
-				if (grid[i][j])
-					goldPositions.push_back({ i, j });
-		for (auto startPosition : goldPositions)
-		{
-			int const& x = startPosition.first;
-			int const& y = startPosition.second;
-			int current = grid[x][y];
-			result = max(result, current);
-			M[x][y] = 1;
-			calc(M, grid, x, y, current, result);
-            M[x][y] = 0;
-		}
-		return result;
-	}
+    int calc(int V, int total, int mask)
+    {
+        mask ^= 1 << V;
+        total += gold[V];
+        if (mask == 0)
+            return total;
+        int result = total;
+        int nextV = mask & connectivity[V];
+        while (nextV)
+        {
+            result = max(result, calc(__builtin_ffs(nextV) - 1, total, mask));
+            nextV &= nextV - 1;
+        }
+        return result;
+    }
+    int getMaximumGold(vector<vector<int>>& grid) {
+        int result = 0;
+        int X = grid.size(), Y = grid[0].size();
+        vector<vector<int>> F(grid);
+        memset(connectivity, 0, sizeof(connectivity));
+        for(int i = 0; i < X; ++i)
+            for(int j = 0; j < Y; ++j)
+                if (grid[i][j])
+                    F[i][j] = ++N, gold[N] = grid[i][j];
+        for (int i = 0; i < X; ++i)
+            for (int j = 0; j < Y; ++j)
+                if (F[i][j])
+                    for (int z = 0; z < 4; ++z)
+                        if (i + dx[z] < X && i + dx[z] >= 0 &&
+                            j + dy[z] < Y && j + dy[z] >= 0 &&
+                            F[i + dx[z]][j + dy[z]] > 0)
+                            connectivity[F[i][j]] |= 1 << F[i + dx[z]][j + dy[z]];
+        for (int V = 1; V <= N; ++V)
+            result = max(result, calc(V, 0, (2 << N) - 2));
+        return result;
+    }
 };

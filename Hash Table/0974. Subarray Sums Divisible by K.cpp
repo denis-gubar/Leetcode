@@ -12,8 +12,7 @@ public:
 			++M[s];
 		}
 		for (int x : M)
-			if (x)
-				result += x * (x - 1) / 2;
-		return result;
+			result += x * (x - 1);
+		return result / 2;
 	}
 };

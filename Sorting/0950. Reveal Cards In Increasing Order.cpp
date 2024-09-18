@@ -8,6 +8,7 @@ public:
 		for (int i = 0; i < n; ++i)
 			Q.push(i);
 		vector<int> A;
+        A.reserve(n);
 		while (!Q.empty())
 		{
 			int v = Q.front(); Q.pop();

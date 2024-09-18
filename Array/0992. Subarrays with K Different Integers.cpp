@@ -2,9 +2,9 @@ class Solution {
 public:
 	int subarraysWithKDistinct(vector<int>& A, int K) {
 		int result = 0;
-		int a = 0, b = 0, distinct = 0;
-		vector<int> counts(A.size() + 1);
-		while (a < A.size())
+		int a = 0, b = 0, distinct = 0, N = A.size();
+		vector<int> counts(N + 1);
+		while (a < N)
 		{
 			if (a && --counts[A[a - 1]] == 0)
 				--distinct;
@@ -19,7 +19,7 @@ public:
 			}
 			if (a)
 				++b;
-			while (distinct <= K && b < A.size())
+			while (distinct <= K && b < N)
 			{
 				if (++counts[A[b]] == 1)
 					++distinct;

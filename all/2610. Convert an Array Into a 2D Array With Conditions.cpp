@@ -3,6 +3,7 @@ public:
     vector<vector<int>> findMatrix(vector<int>& nums) {
         int N = nums.size();
         vector<vector<int>> result;
+        result.reserve(N);
         unordered_map<int, int> M;
         for (int x : nums)
             ++M[x];

@@ -2,7 +2,6 @@ class MovingAverage {
 public:
 	/** Initialize your data structure here. */
 	MovingAverage(int size): sum(0.0), size(size) {
-		
 	}
 
 	double next(int val) {

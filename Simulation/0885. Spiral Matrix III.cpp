@@ -2,6 +2,7 @@ class Solution {
 public:
 	vector<vector<int>> spiralMatrixIII(int R, int C, int r0, int c0) {
 		vector<vector<int>> result;
+        result.reserve(R * C);
 		vector<int> dx{ 0, 1, 0, -1 };
 		vector<int> dy{ 1, 0, -1, 0 };
 		int x = r0, y = c0, d = 0, K = 1;

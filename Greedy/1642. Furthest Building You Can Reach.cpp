@@ -3,6 +3,7 @@ public:
 	int furthestBuilding(vector<int>& heights, int bricks, int ladders) {
 		int a = min(ladders, static_cast<int>(heights.size()) - 1), b = heights.size();
 		vector<int> A;
+        A.reserve(heights.size());
 		for (int i = 1; i < heights.size(); ++i)
 			A.push_back(max(0, heights[i] - heights[i - 1]));
 		while (a + 1 < b)

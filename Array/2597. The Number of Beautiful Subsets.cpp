@@ -4,6 +4,7 @@ public:
         int N = nums.size();
         int result = 0;
         vector<int> bad;
+        bad.reserve(1'000);
         for (int i = 1; i < N; ++i)
             for (int j = 0; j < i; ++j)
             {

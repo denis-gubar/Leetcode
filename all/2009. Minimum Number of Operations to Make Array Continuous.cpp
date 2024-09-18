@@ -3,14 +3,13 @@ public:
 	int minOperations(vector<int>& nums) {
 		int N = nums.size();
 		int result = N;
-		set<int> S;
-		for (int x : nums)
-			S.insert(x);
+    sort(nums.begin(), nums.end());
+		nums.resize(unique(nums.begin(), nums.end()) - nums.begin());
 		int delta = 0;
-		auto it = S.begin();
-		for (int x : S)
+		auto it = nums.begin();
+		for (int x : nums)
 		{
-			while (it != S.end() && *it - x <= N - 1)
+			while (it != nums.end() && *it - x <= N - 1)
 			{
 				++it;
 				++delta;

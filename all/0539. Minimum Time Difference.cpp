@@ -12,6 +12,7 @@ public:
 		};
 		int result = 1440;
 		vector<int>	A;
+        A.reserve(timePoints.size() + 1);
 		for (string const& t : timePoints)
 			A.push_back(parse(t));
 		sort(A.begin(), A.end());

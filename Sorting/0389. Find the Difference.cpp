@@ -1,14 +1,14 @@
 class Solution {
 public:
 	char findTheDifference(string s, string t) {
-		vector<int> A(128), B(128);
-		for (int c : s)
-			++A[c];
-		for (int c : t)
-			++B[c];
-		for (int i = 0; i < 128; ++i)
-			if (A[i] != B[i])
+		int A = 0;
+		for (char c : s)
+			A ^= 1 << (c - 'a');
+		for (char c : t)
+			A ^= 1 << (c - 'a');
+		for (char i = 'a'; i <= 'z'; ++i)
+			if (A & (1 << (i - 'a')))
 				return i;
-        return 0;
+    return 0;
 	}
 };

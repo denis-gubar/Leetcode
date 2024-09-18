@@ -1,7 +1,7 @@
 class Solution {
 public:
     int nthUglyNumber(int n) {
-        vector<size_t> primes{2, 3, 5};        
+        array primes{2, 3, 5};        
         size_t P = primes.size();
         vector<int> A(P, -1);
         vector<size_t> F{1};

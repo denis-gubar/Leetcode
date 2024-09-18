@@ -2,7 +2,7 @@ class Solution {
 public:
 	int minimumEffortPath(vector<vector<int>>& heights) {
 		int N = heights.size(), M = heights[0].size();
-		vector<vector<int>> F(N, vector<int>(M, 1'000'000));
+		vector<vector<int>> F(N, vector<int>(M, 1 << 30));
 		vector<int>	dx{ 0, -1, 0, 1 };
 		vector<int>	dy{ -1, 0, 1, 0 };
 		F[0][0] = 0;

@@ -1,15 +1,16 @@
 class Solution {
 public:
 	int minimumLength(string s) {
-		deque<char> A(s.begin(), s.end());
-		while (A.size() > 1 && A.front() == A.back())
+        int N = s.size();
+		int left = 0, right = N - 1;
+		while (left < right && s[left] == s[right])
 		{
-			char x = A.back();
-			while (!A.empty() && A.front() == x)
-				A.pop_front();
-			while (!A.empty() && A.back() == x)
-				A.pop_back();
+			char x = s[right];
+			while (left <= right && s[left] == x)
+				++left;
+			while (left <= right && s[right] == x)
+				--right;
 		}
-		return A.size();
+		return right - left + 1;
 	}
 };

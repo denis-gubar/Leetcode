@@ -22,6 +22,7 @@ public:
 	}
 	bool isEvenOddTree(TreeNode* root) {
 		vector<vector<int>> levels;
+        levels.reserve(100'000);
         calc(root, levels);
 		for (int i = 0; i < levels.size(); ++i)
         {

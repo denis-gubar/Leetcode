@@ -9,7 +9,7 @@
  */
 class Solution {
 public:
-	void calc(TreeNode* root, map<int, int>& M, int& best, vector<int>& result)
+	void calc(TreeNode* root, unordered_map<int, int>& M, int& best, vector<int>& result)
 	{
 		if (root)
 		{
@@ -27,7 +27,7 @@ public:
 	}
 	vector<int> findMode(TreeNode* root) {
 		vector<int> result;
-		map<int, int> M;
+		unordered_map<int, int> M;
 		int best = 0;
 		calc(root, M, best, result);
 		return result;

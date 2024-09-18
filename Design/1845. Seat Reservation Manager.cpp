@@ -8,15 +8,13 @@ public:
 	int reserve() {
 		int result = *U.begin();
 		U.erase(U.begin());
-		R.insert(result);
 		return result;
 	}
 
 	void unreserve(int seatNumber) {
 		U.insert(seatNumber);
-		R.erase(seatNumber);
 	}
-	set<int> R, U;
+	set<int> U;
 };
 /**
  * Your SeatManager object will be instantiated and called as such:

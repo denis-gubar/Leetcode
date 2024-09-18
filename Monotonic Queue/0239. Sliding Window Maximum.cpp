@@ -8,7 +8,7 @@ public:
 			while (!Q.empty() && Q.front() <= pos)
 				Q.pop_front();
 		};
-		auto add = [&nums, &Q, &remove, k](int pos)
+		auto add = [&nums, &Q, &remove](int pos)
 		{
             while (!Q.empty() && nums[Q.front()] <= nums[pos])
                 Q.pop_front();

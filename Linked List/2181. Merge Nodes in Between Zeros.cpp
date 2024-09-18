@@ -11,29 +11,21 @@
 class Solution {
 public:
     ListNode* mergeNodes(ListNode* head) {
-        vector<int> A;
-        int sum = 0;
-        while (head)
+        ListNode temp(-1);
+        ListNode* node = &temp;
+        ListNode* left = head;
+        while (true)
         {
-            int x = head->val;
-            if (x > 0)
-                sum += x;
-            else if (sum > 0)
-            {
-                A.push_back(sum);
-                sum = 0;
-            }
-            head = head->next;
-        }
-        if (A.empty())
-            return nullptr;
-        ListNode* result = new ListNode(A[0]);
-        ListNode* node = result;
-        for (int i = 1; i < A.size(); ++i)
-        {
-            node->next = new ListNode(A[i]);
+            ListNode* right = left->next;
+            if (!right)
+                break;
+            int total = right->val;
+            while (right->val > 0)
+                right = right->next, total += right->val;
+            node->next = new ListNode(total);
             node = node->next;
+            left = right;
         }
-        return result;
+        return temp.next;
     }
 };

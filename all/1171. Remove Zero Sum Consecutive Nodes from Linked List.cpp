@@ -3,41 +3,38 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
-	ListNode* removeZeroSumSublists(ListNode* head) {
-		ListNode* result = new ListNode(0);
-		result->next = head;
-		bool flag = true;
-		while (flag)
-		{
-			flag = false;
-			vector<int> sum;
-			vector<ListNode*> nodes;
-			nodes.push_back(result);
-			ListNode* node = result->next;
-			while (node)
-			{
-				nodes.push_back(node);
-				sum.push_back(0);
-				for (int i = 0; i < sum.size(); ++i)
-				{
-					sum[i] += node->val;
-					if (!sum[i])
-					{
-						nodes[i]->next = node->next;
-						flag = true;
-						break;
-					}
-				}
-				if (flag)
-					break;
-				node = node->next;
-			}
-		}
-		return result->next;
-	}
+    ListNode* removeZeroSumSublists(ListNode* head) {
+        ListNode* result = new ListNode(0);
+        result->next = head;
+        unordered_map<int, ListNode*> M;
+        int balance = 0;
+        M[balance] = result;
+        while (head)
+        {
+            balance += head->val;
+            if (M.find(balance) != M.end())
+            {
+                ListNode* node = M[balance];
+                while (node->next != head)
+                {
+                    balance += node->next->val;
+                    M.erase(balance);
+                    node = node->next;
+                }
+                balance += node->next->val;
+                M[balance]->next = head->next;
+            }
+            else
+                M[balance] = head;
+            head = head->next;
+        }
+        return result->next;
+    }
 };

@@ -2,8 +2,9 @@ class Solution {
 public:
 	int numberOfBeams(vector<string>& bank) {
 		int N = bank.size();
-		int result = 0;
+		int result = 0;        
 		vector<int> A;
+        A.reserve(N);
 		for (int i = 0; i < N; ++i)
 		{
 			int x = count(bank[i].begin(), bank[i].end(), '1');

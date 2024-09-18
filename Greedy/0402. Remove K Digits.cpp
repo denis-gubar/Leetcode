@@ -1,28 +1,36 @@
 class Solution {
 public:
 	string removeKdigits(string num, int k) {
-		string result(num);
+		string_view sv(num);
 		string prefix;
-		auto pos = result.find('0');
+		int start = 0, N = num.size();
+		auto pos = sv.find('0');
 		while (pos != string::npos && pos <= k)
 		{
-			result = result.size() > pos + 1 ? result.substr(pos + 1) : "";
+			if (sv.size() > pos)
+				sv = sv.substr(pos + 1);
+			else
+				return "0";
 			k -= pos;
-			pos = result.find('0');
+			pos = sv.find('0');
 		}
 		for (char c = '1'; k && c <= '9'; ++c)
 		{
-			pos = result.find(c);
+			pos = sv.find(c);
 			while (pos != string::npos && pos <= k)
 			{
-				result = result.size() > pos + 1 ? result.substr(pos + 1) : "";
+				if (sv.size() > pos)
+					sv = sv.substr(pos + 1);
+				else
+					return "0";
 				k -= pos;
 				prefix += c;
 				c = '0';
-				pos = result.find(c);
+				pos = sv.find(c);
 			}
 		}
-		result = prefix + result;
+		string result = prefix;
+		result += sv;
 		while (k && !result.empty())
 		{
 			result.pop_back();

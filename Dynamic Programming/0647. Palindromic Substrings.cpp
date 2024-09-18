@@ -9,7 +9,7 @@ public:
 			t += c;
 		}
 		t += '#';
-		for (int i = 1; i < t.size() - 1; ++i)
+		for (int i = 1, e = t.size() - 1; i < e; ++i)
 		{
 			int x = 0;
 			while (i >= x && i + x < t.size() && t[i - x] == t[i + x])
