@@ -1,9 +1,9 @@
 class MyCircularDeque {
 public:
-	vector<int> data;
+	unique_ptr<int[]> data;
 	int begin, end, n, size;
 	/** Initialize your data structure here. Set the size of the deque to be k. */
-	MyCircularDeque(int k): data(vector<int>(k + 1)), n(k), begin(0), end(0), size(0) {
+	MyCircularDeque(int k): data(make_unique<int[]>(k + 1)), n(k), begin(0), end(0), size(0) {
 
 	}
 
