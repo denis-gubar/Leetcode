@@ -1,7 +1,7 @@
 class Solution {
 public:
 	bool canArrange(vector<int>& arr, int k) {
-		vector<int>	A(k);
+		unique_ptr<int[]> A = make_unique<int[]>(k);
 		for (int x : arr)
 			++A[(x % k + k) % k];
 		if (A[0] % 2 == 1) return false;
