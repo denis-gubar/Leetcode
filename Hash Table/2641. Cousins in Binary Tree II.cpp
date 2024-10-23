@@ -11,49 +11,56 @@
  */
 class Solution {
 public:
-	void calc(TreeNode* root, int level = 0)
-	{
-		if (root)
-		{
-			if (Levels.size() == level)
-				Levels.push_back({});
-			Levels[level].push_back(root->val);
-			if (root->left)
-			{
-				parents[root->left] = root;
-				D[root] += root->left->val;
-			}
-			if (root->right)
-			{
-				parents[root->right] = root;
-				D[root] += root->right->val;
-			}
-			calc(root->left, level + 1);
-			calc(root->right, level + 1);
-		}
-	}
-	void update(TreeNode* root, int level = 0)
-	{
-		if (root)
-		{
-			Levels[level].push_back(root->val);
-			if (level > 0)
-				root->val = sums[level] - D[parents[root]];
-			else
-				root->val = 0;
-			update(root->left, level + 1);
-			update(root->right, level + 1);
-		}
-	}
-	vector<vector<int>> Levels;
-	vector<int> sums;
-	unordered_map<TreeNode*, TreeNode*> parents;
-	unordered_map<TreeNode*, int> D;
+    unique_ptr<int[]> sum;
+    void calcLevel(TreeNode* root, int level = 0)
+    {
+        if (!root) return;
+        sum[level] += root->val;
+        calcLevel(root->left, level + 1);
+        calcLevel(root->right, level + 1);
+    }
+    void calc(TreeNode* root, int level = 0)
+    {
+        if (!root) return;
+        if (level < 2)
+            root->val = 0;
+        int L = 0, R = 0;
+        if (root->left)
+        {
+            if (root->left->left)
+                L += root->left->left->val;
+            if (root->left->right)
+                L += root->left->right->val;
+        }
+        if (root->right)
+        {
+            if (root->right->left)
+                R += root->right->left->val;
+            if (root->right->right)
+                R += root->right->right->val;
+        }
+        if (root->left)
+        {
+            if (root->left->left)
+                root->left->left->val = sum[level + 2] - L;
+            if (root->left->right)
+                root->left->right->val = sum[level + 2] - L;
+        }
+        if (root->right)
+        {
+            if (root->right->left)
+                root->right->left->val = sum[level + 2] - R;
+            if (root->right->right)
+                root->right->right->val = sum[level + 2] - R;
+        }
+        calc(root->left, level + 1);
+        calc(root->right, level + 1);
+    }
     TreeNode* replaceValueInTree(TreeNode* root) {
-		calc(root);
-		for (int i = 0; i < Levels.size(); ++i)
-			sums.push_back(accumulate(Levels[i].begin(), Levels[i].end(), 0));
-		update(root);
-		return root;
+        sum = make_unique<int[]>(100'000);  
+        calcLevel(root);
+        calc(root);
+        return root;
     }
 };
+
