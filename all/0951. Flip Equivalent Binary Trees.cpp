@@ -40,6 +40,8 @@ public:
 	}
 	bool flipEquiv(TreeNode* root1, TreeNode* root2) {
 		vector<int> A, B;
+        A.reserve(100);
+        B.reserve(100);
 		calc(root1, A);
 		calc(root2, B);
 		return A == B;

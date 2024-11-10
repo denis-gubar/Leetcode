@@ -1,4 +1,4 @@
-static long long F[102][102][102];
+static long long F[101][101][101];
 class Solution {
 public:    
     long long minimumTotalDistance(vector<int>& robot, vector<vector<int>>& factory) {
@@ -13,7 +13,7 @@ public:
             for (int j = 0; j < M; ++j)
                 for (int k = 0; k <= factory[j][1]; ++k)
                     if (F[i][j][k] < INF)
-                    {
+                    {                        
                         F[i][j + 1][0] = min(F[i][j + 1][0], F[i][j][k]);
                         if (k < factory[j][1])
                             F[i + 1][j][k + 1] = min(F[i + 1][j][k + 1], F[i][j][k] + abs(robot[i] - factory[j][0]));

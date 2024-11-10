@@ -1,9 +1,10 @@
 class Solution {
 public:
 	vector<int> getMaximumXor(vector<int> nums, int maximumBit) {
-		vector<int> result;
+		int const N = nums.size();
+        vector<int> result;
+        result.reserve(N);
 		int total = (1 << maximumBit) - 1;
-		int N = nums.size();
 		for (int n : nums)
 			total ^= n;
 		for (int i = 0; i < N; ++i)

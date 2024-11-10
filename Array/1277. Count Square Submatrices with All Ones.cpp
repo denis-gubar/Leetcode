@@ -1,9 +1,10 @@
+static int F[301][301];
 class Solution {
 public:
 	int countSquares(vector<vector<int>>& matrix) {
 		int result = 0;
 		int N = matrix.size(), M = matrix[0].size();
-		vector<vector<int>> F(N + 1, vector<int>(M + 1, 0));
+		memset(F, 0, sizeof(F));
 		for (int i = N - 1; i >= 0; --i)
 			for (int j = M - 1; j >= 0; --j)
 				if (matrix[i][j])
