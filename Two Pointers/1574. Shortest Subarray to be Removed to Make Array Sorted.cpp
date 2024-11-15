@@ -5,6 +5,8 @@ public:
 		int result = N - 1;
 		int current = 1;
 		vector<int>	left, right;
+        left.reserve(N);
+        right.reserve(N);
 		left.push_back(arr[0]);
 		for (int i = 1; i < N; ++i)
 			if (arr[i] >= arr[i - 1])

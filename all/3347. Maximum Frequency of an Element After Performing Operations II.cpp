@@ -17,7 +17,7 @@ public:
         }
         for (int a = 0, b = 0; b < N; ++b)
         {
-            while (nums[a] + 2 * K < nums[b])
+            while (1LL * nums[a] + 2 * K < nums[b])
                 ++a;
             result = max(result, min(numOperations, b - a + 1));
         }
