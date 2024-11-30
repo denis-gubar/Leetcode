@@ -11,8 +11,8 @@ public:
         for (int d = (x == 0); d < 10; ++d)
             calc(x + d);
     }
-    vector<int> lexicalOrder(int N) {
-        this->N = N;
+    vector<int> lexicalOrder(int n) {
+        N = n;
         result.reserve(N);
         calc(0);
         return result;
