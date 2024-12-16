@@ -2,6 +2,7 @@ class Solution {
 public:
 	int maxTwoEvents(vector<vector<int>>& events) {
 		vector<pair<int, pair<int, int>>> E;
+        E.reserve(events.size() * 2);
 		int result = 0;
 		for (vector<int> const& ev : events)
 		{
