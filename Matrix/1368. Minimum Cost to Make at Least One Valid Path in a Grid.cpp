@@ -1,8 +1,9 @@
+static int F[100][100];
 class Solution {
 public:
 	int minCost(vector<vector<int>>& grid) {
-		int N = grid.size(), M = grid[0].size();
-		vector<vector<int>> F(N, vector<int>(M, N + M));
+		int const N = grid.size(), M = grid[0].size();
+		memset(F, 1, sizeof(F));
 		vector<int> dx{ 0, 0, 0, 1, -1 };
 		vector<int> dy{ 0, 1, -1, 0, 0 };
 		F[0][0] = 0;
@@ -29,6 +30,6 @@ public:
 				}
 			}
 		}
-		return F.back().back();
+		return F[N - 1][M - 1];
 	}
 };
