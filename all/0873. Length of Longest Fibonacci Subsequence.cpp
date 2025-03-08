@@ -2,8 +2,8 @@ class Solution {
 public:
 	int lenLongestFibSubseq(vector<int>& A) {
 		int result = 0;
-		int n = A.size();
-		set<int> S;
+		int const n = A.size();
+		unordered_set<int> S;
 		for (int i : A)
 			S.insert(i);
 		for(int i = 0; i + 2 < n; ++i)

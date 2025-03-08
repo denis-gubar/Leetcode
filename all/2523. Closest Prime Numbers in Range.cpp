@@ -1,25 +1,27 @@
 class Solution {
 public:
     vector<int> closestPrimes(int left, int right) {
-        vector<bool> isPrime(1'000'001, true);
+        vector<bool> isPrime(right + 1, true);
         isPrime[1] = isPrime[0] = false;
         int primeCount = 0;
-        for (int i = 2; i < 1'000'001; ++i)
+        for (int i = 2; i * i <= right; ++i)
             if (isPrime[i])
             {
-                for (long long k = 1LL * i * i; k <= 1'000'000; k += i)
+                for (int k = i * i; k <= right; k += i)
                     isPrime[k] = false;
             }
-        vector<int> A;
+        vector<int> result = { -1, -1 };
+        int best = right - left + 1, last = -1;
         for (int x = left; x <= right; ++x)
             if (isPrime[x])
-                A.push_back(x);
-        if (A.size() < 2)
-            return { -1, -1 };
-        vector<int> result = { A[0], A[1] };
-        for (int i = 2; i < A.size(); ++i)
-            if (A[i] - A[i - 1] < result[1] - result[0])
-                result[0] = A[i - 1], result[1] = A[i];
+            {
+                if (last > 0)
+                {
+                    if (x - last < best)
+                        best = x - last, result[0] = last, result[1] = x;
+                }
+                last = x;
+            }
         return result;
     }
 };

@@ -1,7 +1,9 @@
 class Solution {
 public:
 	int numTilePossibilities(string tiles) {
+        int result = 0;
 		int N = tiles.size();
+        sort(tiles.begin(), tiles.end());
 		set<string> S;
 		for (int x = 1; x < (1 << N); ++x)
 		{
@@ -9,15 +11,14 @@ public:
 			for (int k = 0; k < N; ++k)
 				if (x & (1 << k))
 					s += tiles[k];
-			sort(s.begin(), s.end());
-			if (S.find(s) == S.end())
+			if (S.insert(s).second)
 			{
 				do
 				{
-					S.insert(s);
+					++result;
 				} while (next_permutation(s.begin(), s.end()));
 			}
 		}
-		return S.size();
+		return result;
 	}
 };
