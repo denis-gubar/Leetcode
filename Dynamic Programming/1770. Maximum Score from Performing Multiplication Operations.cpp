@@ -1,27 +1,16 @@
+static int F[301][301];
 class Solution {
 public:
-	int const INF = 1 << 30;
-	int N, M;
-	int calc(int begin, int end, int i)
-	{
-		if (i == M)
-			return 0;
-		if (F[begin][i] == -INF)
-		{
-			int A = calc(begin + 1, end, i + 1) + multipliers[i] * nums[begin];
-			int B = calc(begin, end - 1, i + 1) + multipliers[i] * nums[end];
-			F[begin][i] = max(A, B);
-		}
-		return F[begin][i];
-	}
-	int maximumScore(vector<int>& nums, vector<int>& multipliers) {
-		this->nums = nums;
-		this->multipliers = multipliers;
-		N = nums.size(), M = multipliers.size();
-		F = vector<vector<int>>(M, vector<int>(M, -INF));
-		return calc(0, N - 1, 0);
-	}
-	vector<vector<int>> F;
-	vector<int> nums;
-	vector<int> multipliers;
+    int maximumScore(vector<int>& nums, vector<int>& multipliers) {
+        int const N = nums.size(), M = multipliers.size();
+        memset(F, -100, sizeof(F));
+        F[0][0] = 0;
+        for (int i = 0; i < M; ++i)
+            for (int j = 0; j <= i; ++j)
+            {
+                F[i + 1][j] = max(F[i + 1][j], F[i][j] + multipliers[i] * nums[N - 1 - i + j]);
+                F[i + 1][j + 1] = max(F[i + 1][j + 1], F[i][j] + multipliers[i] * nums[j]);
+            }
+        return *max_element(&F[M][0], &F[M][0] + M + 1);
+    }
 };

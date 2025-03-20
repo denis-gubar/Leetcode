@@ -1,32 +1,27 @@
+static int F[1'001][102][2];
 class Solution {
 public:
-	int maxProfit(int k, vector<int>& prices) {
-		if (k == 0) return 0;
-		int INF = 1'000'000'000;
-		vector<int>	F{ -INF, 0 };
-		for (int p : prices)
-		{
-			vector<int>	NF(F);
-			int FSize = F.size();
-			if (FSize < 2 * k)
-			{
-				F.push_back(max(-INF, F[FSize - 1] - p));
-				F.push_back(max(0, F[FSize - 2] + p));
-			}
-			for (int i = FSize - 2; i >= 0; i -= 2)
-			{
-				F[i + 1] = max(F[i + 1], F[i] + p);
-				F[i] = max(F[i], (i > 0 ? F[i - 1] : 0) - p);
-			}
-            if (F.size() > FSize && F[FSize - 1] == F[FSize + 1])
+    int maxProfit(int K, vector<int>& prices) {
+        int const N = prices.size();
+        memset(F, -100, sizeof(F));
+        int const INF = F[0][0][0];
+        F[0][0][0] = 0;
+        auto update = [](int& x, int value)
             {
-                F.pop_back();
-                F.pop_back();
+                if (x < value)
+                    x = value;
+            };
+        for (int i = 0; i < N; ++i)
+            for (int j = 0; j <= K; ++j)
+            {
+                update(F[i + 1][j][0], F[i][j][0]);
+                update(F[i + 1][j][1], F[i][j][1]);
+                update(F[i + 1][j + 1][1], F[i][j][0] - prices[i]);
+                update(F[i + 1][j][0], F[i][j][1] + prices[i]);
             }
-		}
-		int result = 0;
-		for (int i = 1; i < F.size(); i += 2)
-			result = max(result, F[i]);
-		return result;
-	}
+        int result = 0;
+        for (int j = 1; j <= K; ++j)
+            update(result, F[N][j][0]);
+        return result;
+    }
 };

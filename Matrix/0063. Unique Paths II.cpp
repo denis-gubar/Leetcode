@@ -1,15 +1,19 @@
+static int F[100][100];
 class Solution {
 public:
-	int uniquePathsWithObstacles( vector<vector<int>>& obstacleGrid ) {
-		int result = 0;
-		int m = obstacleGrid.size(), n = obstacleGrid[0].size();
-		vector<vector<int>> M( m, vector<int>( n ) );
-		if (obstacleGrid[0][0] == 0)
-			M[0][0] = 1;
-		for (int i = 0; i < m; ++i)
-			for (int j = 0; j < n; ++j)
-				if ( obstacleGrid[i][j] == 0)
-					M[i][j] += (i > 0 ? M[i - 1][j] : 0) + (j > 0 ? M[i][j - 1] : 0);
-		return M[m - 1][n - 1];
-	}
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        int const N = obstacleGrid.size(), M = obstacleGrid[0].size();
+        memset(F, 0, sizeof(F));
+        F[0][0] = 1 - obstacleGrid[0][0];
+        for(int i = 0; i < N; ++i)
+            for(int j = 0; j < M; ++j)
+                if (obstacleGrid[i][j] == 0)
+                {
+                    if (i > 0)
+                        F[i][j] += F[i - 1][j];
+                    if (j > 0)
+                        F[i][j] += F[i][j - 1];
+                }
+        return F[N - 1][M - 1];
+    }
 };

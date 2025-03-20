@@ -1,25 +1,28 @@
+static int F[395];
 class Solution {
 public:
-	int mincostTickets(vector<int>& days, vector<int>& costs) {
-		vector<int> A(366);
-		for (int d : days)
-			++A[d];
-		vector<int> M(400, 1'000'000);
-		M[0] = 0;
-		for(int i = 1; i < 366; ++i)
-			if (A[i])
-			{
-				for (int j = 0; j < 1; ++j)
-					M[i + j] = min(M[i + j], M[i - 1] + costs[0]);
-				for (int j = 0; j < 7; ++j)
-					M[i + j] = min(M[i + j], M[i - 1] + costs[1]);
-				for (int j = 0; j < 30; ++j)
-					M[i + j] = min(M[i + j], M[i - 1] + costs[2]);
-			}
-			else
-			{
-				M[i] = min(M[i], M[i - 1]);
-			}
-		return M[365];
-	}
+    int mincostTickets(vector<int>& days, vector<int>& costs) {
+        int const N = days.size();
+        memset(F, 1, sizeof(F));
+        F[0] = 0;
+        auto update = [](int& x, int value)
+            {
+                if (x > value)
+                    x = value;
+            };
+        int last = 0;
+        for (int i : days)
+        {
+            while (last + 1 < i)
+                update(F[last + 1], F[last]), ++last;
+            for(int j = 0, NF = F[i - 1] + costs[0]; j < 1; ++j)
+                update(F[i + j], NF);
+            for (int j = 0, NF = F[i - 1] + costs[1]; j < 7; ++j)
+                update(F[i + j], NF);
+            for (int j = 0, NF = F[i - 1] + costs[2]; j < 30; ++j)
+                update(F[i + j], NF);
+            last = i;
+        }
+        return F[days[N - 1]];
+    }
 };

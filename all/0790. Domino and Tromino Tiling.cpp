@@ -1,23 +1,36 @@
+static int F[1'003][3];
 class Solution {
 public:
-    const int MOD = 1000000007;
-    int numTilings( int N ) {
-        vector<int> M( N + 1 );
-        M[0] = 1;
-        for (int i = 1; i <= N; ++i)
-        {
-            M[i] = M[i - 1];
-            if (i > 1)
+    int numTilings(int N) {
+        int const MOD = 1'000'000'007;
+        memset(F, 0, sizeof(F));
+        F[0][1] = 1;
+        auto update = [MOD](int& x, int value)
             {
-                M[i] += M[i - 2];
-                M[i] %= MOD;
-            }
-            for (int k = 0; k <= i - 3; ++k)
-            {                
-                M[i] += 2 * M[k] % MOD;
-                M[i] %= MOD;
-            }
+                x += value;
+                if (x >= MOD)
+                    x -= MOD;
+            };
+        //2: ***
+        //   ****
+        //1: ***
+        //   ***
+        //0: ****
+        //   ***
+        for (int i = 0; i < N; ++i)
+        {
+            update(F[i][2], F[i][0]);
+           
+            update(F[i + 1][1], F[i][1]);
+            update(F[i + 2][1], F[i][1]);
+            update(F[i + 2][0], F[i][1]);
+            update(F[i + 1][2], F[i][1]);
+
+            update(F[i + 2][0], F[i][2]);
+            update(F[i + 2][1], F[i][2]);
+            
+            update(F[i + 1][1], F[i][0]);            
         }
-        return M[N];
+        return F[N][1];
     }
 };

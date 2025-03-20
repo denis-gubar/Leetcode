@@ -1,27 +1,27 @@
+static long long F[20'001][6];
 class Solution {
 public:
-	int countVowelPermutation(int n) {
-		static const int MOD = 1000000007;
-		int result = 0;
-		vector<vector<char>> transitions(128);
-		transitions['!'] = { 'a', 'e', 'i', 'o', 'u' };
-		transitions['a'] = { 'e' };
-		transitions['e'] = { 'a', 'i' };
-		transitions['i'] = { 'a', 'e', 'o', 'u' };
-		transitions['o'] = { 'i', 'u' };
-		transitions['u'] = { 'a' };
-		unordered_map<char, long long> counts;
-		counts['!'] = 1;
-		for (int i = 0; i < n; ++i)
-		{
-			unordered_map<char, long long> nextCounts;
-			for (auto m : counts)
-				for (char transition : transitions[m.first])
-					nextCounts[transition] += m.second % MOD;
-			counts = move(nextCounts);
-		}
-		for (auto m : counts)
-			result = (result + m.second) % MOD;
-		return result;
-	}
+    int countVowelPermutation(int N) {
+        int const MOD = 1'000'000'007;
+        //aeiou!
+        vector<vector<char>> const M = {
+            { 1 },
+            {0, 2},
+            {0, 1, 3, 4},
+            {2, 4},
+            {0},
+            {0, 1, 2, 3, 4}
+        };
+        memset(F, 0, sizeof(F));
+        F[0][5] = 1;
+        for (int i = 0; i < N; ++i)
+            for (int j = 0; j < 6; ++j)
+                if (F[i][j] != 0)
+                    for (int nj : M[j])
+                        F[i + 1][nj] = (F[i + 1][nj] + F[i][j]) % MOD;
+        long long result = 0;
+        for (int j = 0; j < 5; ++j)
+            result += F[N][j];
+        return result % MOD;
+    }
 };

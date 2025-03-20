@@ -1,13 +1,13 @@
+static int F[100];
 class Solution {
 public:
-	int rob(vector<int>& nums) {
-		int N = nums.size();
-		vector<vector<int>> M(2, vector<int>(N + 1));
-		for (int i = 0; i < N; ++i)
-		{
-			M[0][i + 1] = max(M[0][i], M[1][i]);
-			M[1][i + 1] = M[0][i] + nums[i];
-		}
-		return max(M[0][N], M[1][N]);
-	}
+    int rob(vector<int>& nums) {
+        int const N = nums.size();
+        F[0] = nums[0];
+        if (N > 1)
+            F[1] = max(nums[0], nums[1]);
+        for (int i = 2; i < N; ++i)
+            F[i] = max(F[i - 1], F[i - 2] + nums[i]);
+        return F[N - 1];
+    }
 };

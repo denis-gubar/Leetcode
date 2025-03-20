@@ -1,18 +1,22 @@
+static int F[301][301];
 class Solution {
 public:
-	int maximalSquare(vector<vector<char>>& matrix) {
-		int result = 0;
-		int N = matrix.size(), M = N ? matrix[0].size() : 0;
-		if (N == 0 || M == 0)
-			return 0;
-		vector<vector<int>> A(N, vector<int>(M));
-		for (int i = 0; i < N; ++i)
-			for (int j = 0; j < M; ++j)
-				if (matrix[i][j] == '1')
+    int maximalSquare(vector<vector<char>>& matrix) {
+        int const N = matrix.size(), M = matrix[0].size();
+        memset(F, 0, sizeof(F));
+        int result = 0;
+        auto update = [&result](int& x, int value)
+            {
+                if (x < value)
                 {
-					A[i][j] = 1 + min({i ? A[i - 1][j] : 0, j ? A[i][j - 1] : 0, i && j ? A[i - 1][j - 1] : 0});
-                    result = max(result, A[i][j]);
+                    x = value;
+                    result = max(result, value * value);
                 }
-		return result * result;
-	}
+            };
+        for (int i = 0; i < N; ++i)
+            for (int j = 0; j < M; ++j)
+                if (matrix[i][j] == '1')
+                    update(F[i + 1][j + 1], min({ F[i][j], F[i + 1][j], F[i][j + 1] }) + 1);
+        return result;
+    }
 };

@@ -1,27 +1,50 @@
+static bool F[301];
+static string s;
 class Solution {
 public:
-	bool wordBreak(string s, vector<string>& wordDict) {
-		int N = s.size();
-		vector<bool> result(N + 1);
-		result[0] = true;
-		sort(wordDict.begin(), wordDict.end());
-		for(int i = 0; i < N; ++i)
-			if (result[i])
+	struct Trie
+	{
+		Trie()
+		{
+		}
+		void add(string const& s)
+		{
+			Trie* node = this;
+			for (char c : s)
 			{
-				auto first_char = s[i];
-				auto it = lower_bound(wordDict.begin(), wordDict.end(), s.substr(i, 1));
-				while (it != wordDict.end() && (*it)[0] == first_char)
-				{
-					auto word_size = it->size();
-					if (i + word_size <= N &&
-						equal(s.begin() + i, s.begin() + i + word_size,
-							(*it).begin(), (*it).end()))
-					{
-						result[i + word_size] = true;
-					}
-					++it;
-				}
+				if (node->children.find(c) == node->children.end())
+					node->children[c] = new Trie();
+				node = node->children[c];
 			}
-		return result[N];
-	}
+			node->children['#'] = new Trie();
+		}
+		void search(int pos)
+		{
+			Trie* node = this;
+			int const N = s.size();
+			for ( ; pos < N; ++pos)
+			{
+				char const c = s[pos];
+				if (node->children.find(c) == node->children.end())
+					return;
+				node = node->children[c];
+				if (node->children.find('#') != node->children.end())
+					F[pos + 1] = true;
+			}
+		}
+		unordered_map<char, Trie*> children;
+	};
+    bool wordBreak(string s, vector<string>& wordDict) {
+		::s = s;
+		int const N = s.size();
+		memset(F, 0, sizeof(F));
+		F[0] = true;
+		Trie root;
+		for (string const& w : wordDict)
+			root.add(w);
+		for (int i = 0; i < N; ++i)
+			if (F[i])
+				root.search(i);
+		return F[N];
+    }
 };
