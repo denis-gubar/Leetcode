@@ -1,13 +1,20 @@
 class Solution {
 public:
     int singleNumber(vector<int>& nums) {
-        int r1 = 0, r2 = 0;
+        int a = 0, b = 0;
+        //  a  b  x na nb
+        //  0  0  0  0  0
+        //  0  1  0  0  1
+        //  1  0  0  1  0
+        //  0  0  1  0  1
+        //  0  1  1  1  0
+        //  1  0  1  0  0
         for (int x : nums)
         {
-            int n1 = (r1 ^ x) & (~r2);
-            int n2 = (r2 ^ x) & (~n1);
-            r1 = n1, r2 = n2;
+            int na = (a & ~b & ~x) | (~a & b & x);
+            int nb = ~a & (b ^ x);
+            a = na, b = nb;
         }
-        return r1;
+        return b;
     }
 };

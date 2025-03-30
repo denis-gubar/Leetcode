@@ -9,7 +9,7 @@ public:
 			for (int j = 0; j < M; ++j)
 				A.push_back(grid[i][j]);
 		sort(A.begin(), A.end());
-		auto z = *min_element(A.begin(), A.end());
+		auto z = A[0];
 		for (int& k : A)
 			k -= z;
 		for (int& k : A)

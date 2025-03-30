@@ -1,7 +1,7 @@
 class Solution {
 public:
 	string toHex(unsigned int num) {
-		string digits{ "0123456789abcdef"s };
+		string const digits{ "0123456789abcdef"s };
 		string result;
 		if (num == 0)
 			result += '0';

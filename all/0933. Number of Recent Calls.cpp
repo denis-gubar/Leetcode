@@ -1,13 +1,20 @@
 class RecentCounter {
 public:
-	RecentCounter() {
-		pings.clear();
-	}
-
-	int ping(int t) {
-		pings.push_back(t);
-		int result = pings.end() - lower_bound(pings.begin(), pings.end(), t - 3000);
-		return result;
-	}
-	vector<int> pings;
+    queue<int> Q;
+    RecentCounter() {
+        
+    }
+    
+    int ping(int t) {
+        Q.push(t);
+        while (Q.front() + 3000 < Q.back())
+            Q.pop();
+        return Q.size();
+    }
 };
+
+/**
+ * Your RecentCounter object will be instantiated and called as such:
+ * RecentCounter* obj = new RecentCounter();
+ * int param_1 = obj->ping(t);
+ */

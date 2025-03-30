@@ -1,47 +1,36 @@
 class Solution {
 public:
-    static constexpr array results = { "Radiant", "Dire" };
     string predictPartyVictory(string senate) {
-        bool result = false;
-        string newSenate;
+        int const N = senate.size();
+        deque<char> Q(senate.begin(), senate.end());
+        Q.push_back('#');
         int dBlocked = 0, rBlocked = 0;
-        while(true)
+        int dCount = 0, rCount = 0;
+        while (true)
         {
-            int dCount = 0, rCount = 0;
-            for (char c : senate)
+            if (Q.front() == 'R')
             {
-                if (c == 'R')
-                {
-                    if (rBlocked > 0)
-                        --rBlocked;
-                    else
-                    {
-                        ++rCount;
-                        ++dBlocked;
-                        newSenate.push_back('R');
-                    }
-                }
+                if (rBlocked > 0)
+                    --rBlocked;
                 else
-                {
-                    if (dBlocked > 0)
-                        --dBlocked;
-                    else
-                    {
-                        ++dCount;
-                        ++rBlocked;
-                        newSenate.push_back('D');
-                    }
-                }
+                    ++rCount, ++dBlocked, Q.push_back('R');
             }
-            if (dCount == 0)
-                break;
-            if (rCount == 0)
+            else if (Q.front() == 'D')
             {
-                result = true;
-                break;
+                if (dBlocked > 0)
+                    --dBlocked;
+                else
+                    ++dCount, ++rBlocked, Q.push_back('D');
             }
-            senate = move(newSenate);
+            else
+            {
+                if (dCount == 0)
+                    return "Radiant";
+                if (rCount == 0)
+                    return "Dire";
+                dCount = 0, rCount = 0, Q.push_back('#');
+            }
+            Q.pop_front();
         }
-        return results[result];
     }
 };

@@ -1,19 +1,18 @@
 class Solution {
 public:
-	string convertToBase7(int num) {
-		string result;
-		string sign;
-		if (num < 0)
-			sign = "-", num = -num;
-		else if (num == 0)
-			result += '0';
-		while (num)
-		{
-			result += num % 7 + '0';
-			num /= 7;
-		}
-		result += sign;
-		reverse(result.begin(), result.end());
-		return result;
-	}
+    string convertToBase7(int num) {
+        string result, t;
+        if (num < 0)
+            result += '-', num = -num;
+        if (num == 0)
+            result += '0';
+        while(num > 0)
+        {
+            t += (num % 7) + '0';
+            num /= 7;
+        }
+        reverse(t.begin(), t.end());
+        result += t;
+        return result;
+    }
 };

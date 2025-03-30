@@ -1,9 +1,13 @@
 class Solution {
 public:
-	uint32_t reverseBits(uint32_t n) {
-		bitset<32> A(n), B;
-		for (int i = 0; i < 32; ++i)
-			B[i] = A[31 - i];
-		return B.to_ulong();
-	}
+    uint32_t reverseBits(uint32_t n) {
+        uint32_t result = 0;
+        for(int k = 0; k < 32; ++k)
+        {
+            uint32_t bit = n & 1;
+            n >>= 1;
+            result = (result << 1) | bit;
+        }
+        return result;
+    }
 };

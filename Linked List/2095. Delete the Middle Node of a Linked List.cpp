@@ -10,26 +10,18 @@
  */
 class Solution {
 public:
-	ListNode* deleteMiddle(ListNode* head) {
-		ListNode* result = nullptr;
-		vector<int> A;
-		while (head)
-		{
-			A.push_back(head->val);
-			head = head->next;
-		}
-		A.erase(A.begin() + A.size() / 2);
-		if (!A.empty())
-		{
-			result = new ListNode(A[0]);
-			ListNode* node = result;
-			for (int i = 1; i < A.size(); ++i)
-			{
-				node->next = new ListNode(A[i]);
-				node = node->next;
-				node->next = nullptr;
-			}
-		}
-		return result;
-	}
+    ListNode* deleteMiddle(ListNode* head) {
+        if (head->next == nullptr)
+            return nullptr;
+        ListNode* temp = new ListNode;
+        temp->next = head;
+        ListNode* node = head;
+        while (node != nullptr && node->next != nullptr)
+        {
+            node = node->next->next;
+            temp = temp->next;
+        }
+        temp->next = temp->next->next;
+        return head;
+    }
 };
