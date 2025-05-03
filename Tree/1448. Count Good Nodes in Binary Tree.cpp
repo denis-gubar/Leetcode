@@ -11,11 +11,8 @@
  */
 class Solution {
 public:
-	int goodNodes(TreeNode* root, int x = -100'000) {
-		if (!root) return 0;
-		int result = root->val >= x;
-		result += goodNodes(root->left, max(x, root->val));
-		result += goodNodes(root->right, max(x, root->val));
-		return result;
-	}
+    int goodNodes(TreeNode* root, int prevMax = -10'000) {
+        if (!root) return 0;
+        return (prevMax <= root->val) + goodNodes(root->left, max(root->val, prevMax)) + goodNodes(root->right, max(root->val, prevMax));
+    }
 };

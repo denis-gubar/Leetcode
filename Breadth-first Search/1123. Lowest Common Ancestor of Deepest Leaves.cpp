@@ -4,60 +4,50 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
-	void calcDepth(TreeNode* root, int d = 0)
-	{
-		if (!root) return;
-        depth[root] = d;
-		calcDepth(root->left, d + 1);
-        calcDepth(root->right, d + 1);
-	}
-	void calcParents(TreeNode* root)
-	{
-		if (!root) return;
-		if (root->left)
-		{
-			parents[root->left] = root;
-			calcParents(root->left);
-		}
-		if (root->right)
-		{
-			parents[root->right] = root;
-			calcParents(root->right);
-		}
-	}
-	TreeNode* lcaDeepestLeaves(TreeNode* root) {
-		depth.clear();
-		parents.clear();
-		parents[root] = nullptr;
-		calcDepth(root);
-		calcParents(root);
-		int maxDepth = 0;
-		for (auto d : depth)
-			maxDepth = max(maxDepth, d.second);
-		vector<TreeNode*> nodes;
-		for (auto d : depth)
-			if (d.second == maxDepth)
-				nodes.push_back(d.first);
-		while (true)
-		{
-			bool flag = true;
-			for(int i = 1; i < nodes.size(); ++i)
-				if (nodes[i - 1] != nodes[i])
-				{
-					flag = false; break;
-				}
-			if (flag)
-				break;
-			for (TreeNode*& node : nodes)
-				node = parents[node];
-		}
-		return nodes[0];
-	}
-	map<TreeNode*, int> depth;
-	map<TreeNode*, TreeNode*> parents;
+    unordered_set<TreeNode*> S;
+    int maxDepth;
+    TreeNode* result;
+    int caldDepth(TreeNode* root)
+    {
+        if (!root) return 0;
+        return 1 + max(caldDepth(root->left), caldDepth(root->right));
+    }
+    bool mark(TreeNode* root, int level = 1)
+    {
+        if (!root) return false;
+        bool result = level == maxDepth;
+        result |= mark(root->left, level + 1); 
+        result |= mark(root->right, level + 1);
+        if (result)
+            S.insert(root);
+        return result;
+    }
+    void calc(TreeNode* root)
+    {
+        bool hasLeft = S.find(root->left) != S.end();
+        bool hasRight = S.find(root->right) != S.end();
+        if (hasLeft && hasRight || !hasLeft && !hasRight)
+        {
+            result = root;
+            return;
+        }
+        if (hasLeft)
+            calc(root->left);
+        if (hasRight)
+            calc(root->right);
+    }
+    TreeNode* lcaDeepestLeaves(TreeNode* root) {
+        if (!root) return root;
+        maxDepth = caldDepth(root);
+        mark(root);
+        calc(root);
+        return result;
+    }
 };

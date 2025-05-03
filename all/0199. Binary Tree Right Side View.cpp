@@ -11,18 +11,19 @@
  */
 class Solution {
 public:
-	void calc(TreeNode* root, vector<int>& result, int level = 0)
-	{
-		if (!root) return;
-		if (result.size() == level)
-			result.push_back(0);
-		result[level] = root->val;
-		calc(root->left, result, level + 1);
-		calc(root->right, result, level + 1);
-	}
-	vector<int> rightSideView(TreeNode* root) {
-		vector<int>	result;
-		calc(root, result);
-		return result;
-	}
+    vector<int> result;
+    void calc(TreeNode* root, int level = 0)
+    {
+        if (!root) return;
+        if (result.size() == level)
+            result.push_back(root->val);
+        calc(root->left, level + 1);
+        result[level] = root->val;
+        calc(root->right, level + 1);
+    }
+    vector<int> rightSideView(TreeNode* root) {
+        result.clear();
+        calc(root);
+        return result;
+    }
 };

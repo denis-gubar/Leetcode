@@ -4,34 +4,33 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
-    int traverse( TreeNode* root, int target )
+    unordered_map<long long, int> M;
+    int targetSum;
+    int calc(TreeNode* root, long long sum = 0)
     {
-        int result = calc( root, 0, target );
-        if (root->left)
-            result += traverse( root->left, target );
-        if (root->right)
-            result += traverse( root->right, target );
-        return result;
-    }
-    int calc( TreeNode* root, int sum, int target )
-    {
-        int result = 0;
-        if (sum + root->val == target)
-            ++result;
-        if (root->left)
-            result += calc( root->left, sum + root->val, target );
-        if (root->right)
-            result += calc( root->right, sum + root->val, target );
-        return result;
-    }
-    int pathSum( TreeNode* root, int sum ) {
         if (!root)
             return 0;
-        return traverse( root, sum );
+        sum += root->val;
+        int result = 0;
+        ++M[sum];
+        if (auto it = M.find(sum - targetSum); it != M.end())
+            result += it->second - (targetSum == 0);
+        result += calc(root->left, sum);
+        result += calc(root->right, sum);
+        --M[sum];
+        return result;
     }
-};;
+    int pathSum(TreeNode* root, int targetSum) {
+        this->targetSum = targetSum;
+        M.clear();
+        ++M[0];
+        return calc(root);
+    }
+};

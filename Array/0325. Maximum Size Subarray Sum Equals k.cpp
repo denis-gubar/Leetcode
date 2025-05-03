@@ -1,10 +1,10 @@
 class Solution {
 public:
 	int maxSubArrayLen(vector<int>& nums, int k) {
-		int result = 0;
+		long long result = 0;
 		int N = nums.size();
-		vector<int> cum(N + 1);
-		unordered_map<int, int> M;
+		vector<long long> cum(N + 1);
+		unordered_map<long long, int> M;
 		M[cum[0]] = 0;
 		for (int i = 0; i < N; ++i)
 		{
@@ -13,9 +13,9 @@ public:
 		}
 		for (int i = 0; i <= N; ++i)
 		{
-			int value = k + cum[i];
+			long long value = k + cum[i];
 			if (M.find(value) != M.end())
-				result = max({ result, M[value] - i });
+				result = max<long long>(result, M[value] - i);
 		}
 		return result;
 	}

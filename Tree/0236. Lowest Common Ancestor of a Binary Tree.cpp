@@ -9,20 +9,21 @@
  */
 class Solution {
 public:
-	int calc(TreeNode* root, TreeNode* p, TreeNode* q, TreeNode*& result)
-	{
-		if (!root)
-			return 0;
-		int current = 0;
-		current += (root == p) + (root == q);
-		current += calc(root->left, p, q, result) + calc(root->right, p, q, result);
-		if (!result && current == 2)
-			result = root;
-        return current;
-	}
-	TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-		TreeNode* result = nullptr;
-		calc(root, p, q, result);
-		return result;
-	}
+    TreeNode* result;
+    TreeNode* p;
+    TreeNode* q;
+    int calc(TreeNode* root)
+    {
+        if (!root) return 0;
+        int sum = (root == p) + (root == q) + calc(root->left) + calc(root->right);
+        if (sum == 2 && !result)
+            result = root;
+        return sum;
+    }
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        result = nullptr;
+        this->p = p, this->q = q;
+        calc(root);
+        return result;
+    }
 };

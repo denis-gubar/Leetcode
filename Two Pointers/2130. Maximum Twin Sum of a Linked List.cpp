@@ -10,17 +10,37 @@
  */
 class Solution {
 public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode* result = nullptr;
+        while (head != nullptr)
+        {
+            ListNode* next = head->next;
+            head->next = result;
+            result = head;
+            head = next;
+        }
+        return result;
+    }
     int pairSum(ListNode* head) {
         int result = 0;
-        vector<int> A;
-        while (head)
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while (true)
         {
-            A.push_back(head->val);
-            head = head->next;
+            fast = fast->next->next;
+            if (fast == nullptr)
+                break;
+            slow = slow->next;
         }
-        int N = A.size();
-        for (int a = 0, b = N - 1; a < b; ++a, --b)
-            result = max(result, A[a] + A[b]);
+        slow->next = reverseList(slow->next);
+        slow = slow->next;
+        fast = head;
+        while (slow != nullptr)
+        {
+            result = max(result, fast->val + slow->val);
+            fast = fast->next;
+            slow = slow->next;
+        }
         return result;
     }
 };

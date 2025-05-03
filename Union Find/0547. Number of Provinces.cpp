@@ -1,27 +1,22 @@
 class Solution {
 public:
-	int findCircleNum(vector<vector<int>>& M) {
-		int result = 0;
-		int N = M.size();
-		vector<bool> visited(N);
-		for(int i = 0; i < N; ++i)
-			if (!visited[i])
-			{
-				++result;
-                visited[i] = true;
-				queue<int> Q;
-				Q.push(i);
-				while (!Q.empty())
-				{
-					int v = Q.front(); Q.pop();
-					for (int j = 0; j < N; ++j)
-						if (!visited[j] && M[v][j])
-						{
-							visited[j] = true;
-							Q.push(j);
-						}
-				}
-			}
-		return result;
-	}
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        int result = 0;
+        int const N = isConnected.size();
+        vector<bool> visited(N);
+        function<void(int)> dfs = [&](int V) -> void
+            {
+                visited[V] = true;
+                for (int U = 0; U < N; ++U)
+                    if (!visited[U] && isConnected[V][U])
+                        dfs(U);
+            };
+        for(int V = 0; V < N; ++V)
+            if (!visited[V])
+            {
+                ++result;
+                dfs(V);
+            }
+        return result;
+    }
 };
