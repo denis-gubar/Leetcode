@@ -1,55 +1,38 @@
 class Solution {
 public:
-	vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
-		unordered_map<string, int> keys;
-		int N = 0;
-		for(vector<string> const& eq : equations)
-			if (eq[0] != eq[1])
-				for (string const& v : eq)
-				{
-					auto it = keys.find(v);
-					if (it == keys.end())
-						keys[v] = N, ++N;
-				}
-		vector<vector<pair<int, double>>> connectivity(N);
-		for(int i = 0; i < values.size(); ++i)
-			if (equations[i][0] != equations[i][1])
-			{
-				int u = keys[equations[i][0]];
-				int v = keys[equations[i][1]];
-				connectivity[u].push_back({ v, values[i] });
-				connectivity[v].push_back({ u, 1.0 / values[i] });
-			}
-		vector<double> result;
-		for (int i = 0; i < queries.size(); ++i)
-		{
-			result.push_back(-1.0);
-			if (keys.find(queries[i][0]) != keys.end() &&
-				keys.find(queries[i][1]) != keys.end())
-			{
-				int u = keys[queries[i][0]];
-				int v = keys[queries[i][1]];
-				queue<pair<int, double>> Q;
-				Q.push({ u, 1.0 });
-				unordered_set<int> visited;
-				visited.insert(u);
-				while (!Q.empty())
-				{
-					auto [u, val] = Q.front(); Q.pop();
-					if (u == v)
-					{
-						result.back() = val;
-						break;
-					}
-					for(auto [x, y] : connectivity[u])
-						if (visited.find(x) == visited.end())
-						{
-							Q.push({ x, val * y });
-							visited.insert(x);
-						}
-				}
-			}
-		}
-		return result;
-	}
+    vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
+        int const N = equations.size(), Q = queries.size();
+        vector<double> result(Q, -1.0);
+        unordered_map<string, vector<pair<string, double>>> connectivity;
+        for (int i = 0; i < N; ++i)
+        {
+            string const& V = equations[i][0];
+            string const& U = equations[i][1];
+            if (V != U)
+            {
+                connectivity[V].push_back({ U, values[i] });
+                connectivity[U].push_back({ V, 1.0 / values[i] });
+            }
+        }
+        unordered_set<string> visited;
+        function<double(string, string, double)> dfs = [&](string V, string T, double K) -> double
+            {
+                if (V == T) return K;
+                double result = -1.0;
+                for(auto [U, X]: connectivity[V])
+                    if (visited.insert(U).second)
+                        result = max(result, dfs(U, T, X * K));
+                return result;
+            };
+        for (int q = 0; q < Q; ++q)
+        {
+            string const& V = queries[q][0];
+            string const& T = queries[q][1];
+            if (connectivity.find(V) == connectivity.end() || connectivity.find(T) == connectivity.end())
+                continue;
+            visited.clear();
+            result[q] = dfs(V, T, 1.0);
+        }
+        return result;
+    }
 };
