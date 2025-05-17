@@ -1,30 +1,28 @@
 class Solution {
 public:
-	int minReorder(int n, vector<vector<int>>& connections) {
-		int result = 0;
-		vector<vector<int>> connectivity(n);
-		for (vector<int> const& conn : connections)
-		{
-			connectivity[conn[0]].push_back(conn[1]);
-			connectivity[conn[1]].push_back(n + conn[0]);
-		}
-		int V = 0;
-		queue<int> Q;
-		Q.push(V); Q.push(-1);
-		while (!Q.empty())
-		{
-			V = Q.front(); Q.pop();
-			int from = Q.front(); Q.pop();
-			for (int NU : connectivity[V])
-			{
-				int U = NU % n;
-				if (U == from)
-					continue;
-				if (NU == U)
-					++result;
-				Q.push(U); Q.push(V);
-			}
-		}
-		return result;
-	}
+    int minReorder(int N, vector<vector<int>>& connections) {
+        vector<vector<int>> connectivity(N);
+        for (int i = 0; i < N - 1; ++i)
+        {
+            int const& V = connections[i][0];
+            int const& U = connections[i][1];
+            connectivity[V].push_back(U);
+            connectivity[U].push_back(V + N);
+        }
+        int result = 0;
+        function<void(int, int)> dfs = [&](int V, int P) -> void
+            {
+                for (int NU : connectivity[V])
+                {
+                    int const U = NU % N;
+                    if (U == P)
+                        continue;
+                    if (NU == U)
+                        ++result;
+                    dfs(U, V);
+                }
+            };
+        dfs(0, -1);
+        return result;
+    }
 };

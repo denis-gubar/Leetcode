@@ -1,9 +1,9 @@
-static int F[10'001];
+static short F[10'001];
 class Solution {
 public:
     int coinChange(vector<int>& coins, int amount) {
         memset(F, -1, sizeof(F));
-        auto update = [](int& x, int value)
+        auto update = [](short& x, short value)
             {
                 if (x < 0 || x > value)
                     x = value;

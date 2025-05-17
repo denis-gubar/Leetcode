@@ -1,31 +1,22 @@
 class Solution {
 public:
-	bool calc(int x)
-	{
-        if (!x)
-            return false;
-		int count = 0;
-		for (int i = 0; i < piles.size(); ++i)
-			count += (piles[i] + x - 1) / x;
-		return count <= H;
-	}
-	vector<int> piles;
-	int H;
-	int minEatingSpeed(vector<int>& piles, int H) {
-		this->H = H;
-		this->piles = piles;
-		int result = 1 << 30;
-		int x = 1 << 29;
-		for (int i = 29; i >= 0; --i)
-			if (calc(x))
-			{
-				result = x;
-				x -= 1 << i;
-			}
-			else
-            	x += 1 << i;                
-        if (calc(x))
-            result = x;
-		return result;
-	}
+    int minEatingSpeed(vector<int>& piles, int H) {
+        int a = 0, b = 1 << 30;
+        auto calc = [&piles, H](int k) -> bool
+            {
+                long long T = 0;
+                for (int x : piles)
+                    T += (x + k - 1) / k;
+                return T <= H;
+            };
+        while (a + 1 < b)
+        {
+            int m = (a + b) / 2;
+            if (calc(m))
+                b = m;
+            else
+                a = m;
+        }
+        return b;
+    }
 };

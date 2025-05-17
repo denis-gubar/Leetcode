@@ -1,21 +1,21 @@
-static short F[501][501];
+static short F[500][500];
 class Solution {
 public:
-	int calc(string const& s, int start, int length)
-	{
-		if (length < 2) return 0;
-		if (F[start][length] < 0)
-		{
-			if (s[start] == s[start + length - 1])
-				return F[start][length] = calc(s, start + 1, length - 2);
-			F[start][length] = min(calc(s, start + 1, length - 1),
-				calc(s, start, length - 1)) + 1;
-		}
-		return F[start][length];
-	}
-	int minInsertions(string s) {
-		int N = s.size();
-		memset(F, -1, sizeof(F));
-		return calc(s, 0, N);
-	}	
+    int minInsertions(string s) {
+        memset(F, -1, sizeof(F));
+        int const N = s.size();
+        function<int(int, int)> dfs = [&](int a, int b) -> int
+            {
+                if (a >= b)
+                    return 0;
+                if (F[a][b] < 0)
+                {
+                    if (s[a] == s[b])
+                        return F[a][b] = dfs(a + 1, b - 1);
+                    F[a][b] = min(dfs(a + 1, b), dfs(a, b - 1)) + 1;
+                }
+                return F[a][b];
+            };
+        return dfs(0, N - 1);
+    }
 };

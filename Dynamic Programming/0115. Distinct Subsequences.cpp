@@ -1,37 +1,20 @@
-int M[1001][1001];
+static long long F[1'001][1'001];
 class Solution {
 public:
-    string S;
-    string T;
-    int n;
-    int m;    
-    int calc( int ns, int nt )
-    {
-        if (nt == m)
-            return 1;
-        if (n - ns < m - nt)
-            return 0;
-        if (M[ns][nt] >= 0)
-            return M[ns][nt];
-        int result = 0;
-        string::iterator it = S.begin() + ns;
-        while (true)
+    int numDistinct(string s, string t) {
+        int const N = s.size(), M = t.size();
+        memset(F, 0, sizeof(F));
+        F[0][0] = 1;
+        for (int i = 0; i < N; ++i)
         {
-            it = find( it, S.end(), T[nt] );
-            if (it == S.end())
-                break;
-            else
+            for (int j = 0; j < M; ++j)
             {
-                result += calc( distance( S.begin(), it ) + 1, nt + 1 );
-                ++it;
+                F[i + 1][j + 1] += F[i][j] * (s[i] == t[j]);
+                F[i + 1][j] += F[i][j];
+                F[i + 1][j] %= 1LL << 32;
             }
+            F[i + 1][M] += F[i][M];
         }
-        return M[ns][nt] = result;
-    }
-    int numDistinct( string s, string t ) {
-        S = s; T = t;
-        n = s.size(); m = t.size();
-        memset(M, -1, sizeof(M));
-        return calc( 0, 0 );
+        return F[N][M];
     }
 };

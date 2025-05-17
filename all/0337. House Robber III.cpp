@@ -11,16 +11,18 @@
  */
 class Solution {
 public:
-	pair<int, int> calc(TreeNode* root)
-	{
-		if (!root) return { 0, 0 };		
-		pair<int, int> left = calc(root->left);
-		pair<int, int> right = calc(root->right);
-		return {max(left.second + right.second + root->val, left.first + right.first), 
-				max(left.second + right.second, left.first + right.first)};
-	}
-	int rob(TreeNode* root) {
-		auto [rob, noRob] = calc(root);
-		return max(rob, noRob);
-	}
+    pair<int, int> calc(TreeNode* root)
+    {
+        if (!root) return {};
+        pair<int, int> result{};
+        pair<int, int> left = calc(root->left);
+        pair<int, int> right = calc(root->right);
+        result.first = max(left.first, left.second) + max(right.first, right.second);
+        result.second = root->val + left.first + right.first;
+        return result;
+    }
+    int rob(TreeNode* root) {
+        pair<int, int> result = calc(root);
+        return max(result.first, result.second);
+    }
 };

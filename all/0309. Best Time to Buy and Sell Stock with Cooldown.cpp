@@ -1,24 +1,14 @@
-static int F[5'001][3];
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
-        int const N = prices.size();
-        memset(F, -100, sizeof(F));
-        int const INF = F[0][0];
-        F[0][0] = 0;
-        auto update = [](int& x, int value)
-            {
-                if (x < value)
-                    x = value;
-            };
-        for (int i = 0; i < N; ++i)
+        int empty = 0, have = -(1 << 30), sold = -(1 << 30);
+        for (int price : prices)
         {
-            update(F[i + 1][0], F[i][0]);
-            update(F[i + 1][1], F[i][1]);
-            update(F[i + 1][0], F[i][2]);
-            update(F[i + 1][1], F[i][0] - prices[i]);
-            update(F[i + 1][2], F[i][1] + prices[i]);
+            int nEmpty = max(empty, sold);
+            int nHave = max(have, empty - price);
+            int nSold = have + price;
+            empty = nEmpty, have = nHave, sold = nSold;
         }
-        return max(F[N][0], F[N][2]);
+        return max(empty, sold);
     }
 };

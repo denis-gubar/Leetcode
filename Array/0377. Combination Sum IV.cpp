@@ -1,24 +1,20 @@
+static long long F[1'001];
+static long long const INF = 1LL << 32;
 class Solution {
 public:
-	int calc(vector<int> const& A, int target)
-	{
-		if (F[target] < 0)
-		{
-			F[target] = 0;
-			for (int a : A)
-				if (a <= target)
-					F[target] += calc(A, target - a);
-				else
-					break;
-		}
-		return F[target];
-	}
-	int combinationSum4(vector<int>& nums, int target) {
-		int result = 0;
-		F = vector<int>(target + 1, -1);
-		F[0] = 1;
-		sort(nums.begin(), nums.end());		
-		return calc(nums, target);
-	}
-	vector<int> F;
+    int combinationSum4(vector<int>& nums, int target) {
+        memset(F, 0, sizeof(F));
+        F[0] = 1;
+        auto add = [](long long& x, long long value)
+            {
+                x += value;
+                if (x > INF)
+                    x = INF;
+            };
+        for (int i = 0; i < target; ++i)
+            for (int x : nums)
+                if (i + x <= target && F[i] > 0)
+                    add(F[i + x], F[i]);
+        return F[target];
+    }
 };

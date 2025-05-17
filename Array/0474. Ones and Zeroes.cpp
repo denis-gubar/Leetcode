@@ -1,21 +1,24 @@
+static char F[101][101];
+static char A[601][2];
 class Solution {
 public:
-	int findMaxForm(vector<string>& strs, int m, int n) {
-		vector<vector<vector<int>>> F(2, vector<vector<int>>(m + 1, vector<int>(n + 1)));
-		for (int k = 0; k < strs.size(); ++k)
-		{
-            F[(k + 1) % 2] = F[k % 2];
-			int count0 = count(strs[k].begin(), strs[k].end(), '0');
-			int count1 = count(strs[k].begin(), strs[k].end(), '1');
-			for (int i = count0; i <= m; ++i)
-				for (int j = count1; j <= n; ++j)
-					F[(k + 1) % 2][i][j] = max(F[(k + 1) % 2][i][j], F[k % 2][i - count0][j - count1] + 1);
-		}
-		int result = 0;
-		for (int k = 0; k < 2; ++k)
-			for (int i = 0; i <= m; ++i)
-				for (int j = 0; j <= n; ++j)
-					result = max(result, F[k][i][j]);
-		return result;
-	}
+    int findMaxForm(vector<string>& strs, int zeroes, int ones) {
+        int const N = strs.size();
+        memset(A, 0, sizeof(A));
+        for (int i = 0; i < N; ++i)
+            for (char c : strs[i])
+                ++A[i][c - '0'];
+        auto update = [](char& x, char value)
+            {
+                if (x < value)
+                    x = value;
+            };
+        memset(F, 0, sizeof(F));
+        for (int k = 0; k < N; ++k)
+            for (int i = zeroes; i >= 0; --i)
+                for (int j = ones; j >= 0; --j)
+                    if (i + A[k][0] <= zeroes && j + A[k][1] <= ones)
+                        update(F[i + A[k][0]][j + A[k][1]], F[i][j] + 1);
+        return F[zeroes][ones];
+    }
 };

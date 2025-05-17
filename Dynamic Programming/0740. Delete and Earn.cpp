@@ -1,4 +1,4 @@
-static int F[20'001];
+static int F[10'001];
 class Solution {
 public:
     int deleteAndEarn(vector<int>& nums) {

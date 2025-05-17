@@ -1,25 +1,15 @@
+static int F[501][501];
 class Solution {
 public:
-	int minDistance( string word1, string word2 ) {
-		if (word1.size() < word2.size())
-			word1.swap( word2 );
-		int a = word1.size(), b = word2.size();
-		vector<int> Prev( a + 1 ), Cur( a + 1 );
-		for (int i = 0; i <= a; ++i)
-			Cur[i] = i;
-		for (int i = 0; i < b; ++i)
-		{
-			Cur.swap( Prev );
-			Cur[0] = i + 1;
-			for (int j = 1; j <= a; ++j)
-			{
-				Cur[j] = min( Cur[j - 1] + 1, Prev[j] + 1 );
-				if (word1[j - 1] == word2[i])
-					Cur[j] = min( Cur[j], Prev[j - 1] );
-				else
-					Cur[j] = min( Cur[j], Prev[j - 1] + 1 );
-			}
-		}
-		return Cur[a];
-	}
+    int minDistance(string word1, string word2) {
+        int const N = word1.size(), M = word2.size();
+        for (int i = 0; i <= N; ++i)
+            F[i][0] = i;
+        for (int j = 0; j <= M; ++j)
+            F[0][j] = j;
+        for (int i = 0; i < N; ++i)
+            for (int j = 0; j < M; ++j)
+                F[i + 1][j + 1] = min({ F[i][j + 1] + 1, F[i + 1][j] + 1, F[i][j] + (word1[i] != word2[j]) });
+        return F[N][M];
+    }
 };

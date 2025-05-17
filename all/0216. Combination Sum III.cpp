@@ -1,20 +1,31 @@
 class Solution {
 public:
-	vector<vector<int>> combinationSum3(int k, int n) {
-		vector<vector<int>> result;
-		for (int x = 1; x < 512; ++x)
-		{
-			int count = 0, sum = 0;
-			vector<int>	digits;
-			for (int d = 0; d < 9; ++d)
-				if (x & (1 << d))
-				{
-					++count, sum += d + 1;
-					digits.push_back(d + 1);
-				}
-			if (sum == n && count == k)
-				result.push_back(digits);
-		}
-		return result;
-	}
+    vector<vector<int>> combinationSum3(int K, int N) {
+        vector<vector<int>> result;
+        vector<int> prefix;
+        int sum = 0;
+        function<void(void)> dfs = [&]() -> void
+            {                
+                if (prefix.size() == K && sum == N)
+                {
+                    result.push_back(prefix);
+                    return;
+                }
+                for (int d = prefix.empty() ? 1 : (prefix.back() + 1); d < 10; ++d)
+                {
+                    sum += d;
+                    if (sum > N)
+                    {
+                        sum -= d;
+                        break;
+                    }
+                    prefix.push_back(d);
+                    dfs();
+                    prefix.pop_back();
+                    sum -= d;
+                }
+            };
+        dfs();
+        return result;        
+    }
 };
