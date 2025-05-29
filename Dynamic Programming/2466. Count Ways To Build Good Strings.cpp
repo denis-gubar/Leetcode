@@ -1,36 +1,24 @@
+static int const MOD = 1'000'000'007;
+static int F[200'001];
 class Solution {
 public:
     int countGoodStrings(int low, int high, int zero, int one) {
+        memset(F, 0, sizeof(F));
+        F[0] = 1;
+        auto add = [](int& x, int value)
+            {
+                x += value;
+                if (x >= MOD)
+                    x -= MOD;
+            };
+        for (int i = 0, end = high - min(zero, one); i <= end; ++i)
+        {
+            add(F[i + zero], F[i]);
+            add(F[i + one], F[i]);
+        }
         int result = 0;
-		vector<vector<int>> F(2, vector<int>(200'001, -1));
-		const int MOD = 1'000'000'007;
-		F[0][0] = 1;
-		for(int i = 0; i < high; ++i)
-			for(int k = 0; k < 2; ++k)
-				if (F[k][i] >= 0)
-				{
-					if (F[0][i + zero] < 0)
-						F[0][i + zero] = F[k][i];
-					else
-					{
-						F[0][i + zero] += F[k][i];
-						F[0][i + zero] %= MOD;
-					}
-					if (F[1][i + one] < 0)
-						F[1][i + one] = F[k][i];
-					else
-					{
-						F[1][i + one] += F[k][i];
-						F[1][i + one] %= MOD;
-					}
-				}
-		for(int i = low; i <= high; ++i)
-			for(int k = 0; k < 2; ++k)
-				if (F[k][i] > 0)
-				{
-					result += F[k][i];
-					result %= MOD;
-				}
-		return result;
+        for (int i = low; i <= high; ++i)
+            add(result, F[i]);
+        return result % MOD;            
     }
 };
