@@ -1,29 +1,25 @@
 static int const MOD = 1'000'000'007;
+static int const MAX_N = 100'000;
+static int P2[MAX_N];
+static bool isInit = false;
+static void init()
+{
+    if (!isInit)
+    {
+        isInit = true;
+        P2[0] = 1;
+        for (int i = 1; i < 100'000; ++i)
+        {
+            P2[i] = P2[i - 1] << 1;
+            if (P2[i] >= MOD)
+                P2[i] -= MOD;
+        }        
+    }
+}
+static int ancestors[MAX_N + 1];
+static int depth[MAX_N + 1];
 class Solution {
 public:
-    int power(int x, int n)
-    {
-        if (x == 0)
-            return 0;
-        if (n == 0)
-            return 1;
-        if (n == 1)
-            return x;
-        long long result = x;
-        long long extra = 1;
-        while (n > 1)
-        {
-            if (n % 2)
-            {
-                extra *= result;
-                extra %= MOD;
-            }
-            result *= result;
-            result %= MOD;
-            n /= 2;
-        }
-        return result * extra % MOD;
-    }
 public:
     struct UnionFind
     {
@@ -57,6 +53,7 @@ public:
         }
     };
     vector<int> assignEdgeWeights(vector<vector<int>>& edges, vector<vector<int>>& queries) {
+        init();
         int const N = edges.size() + 1, Q = queries.size();
         vector<vector<pair<int, int>>> connectivityQ(N + 1);
         for (int q = 0; q < Q; ++q)
@@ -77,28 +74,19 @@ public:
             connectivity[V].push_back(U);
             connectivity[U].push_back(V);
         }
-        vector<int> depth(N + 1);
-        depth[0] = -1;
-        function<void(int, int)> dfs = [&](int V, int P) -> void
-            {
-                depth[V] = depth[P] + 1;
-                for (int U : connectivity[V])
-                    if (U != P)
-                        dfs(U, V);
-            };
-        dfs(1, 0);
+        depth[1] = 0;
         UnionFind UF(N + 1);
         vector<bool> visited(N + 1);
-        vector<int> ancestors(N + 1);
         vector<int> result(Q);
-        function<void(int)> dfsLCA = [&](int V) -> void
+        auto dfsLCA = [&](this const auto& self, int V) -> void
             {
                 visited[V] = true;
                 ancestors[V] = V;
-                for(int U : connectivity[V])
+                for (int U : connectivity[V])
                     if (!visited[U])
                     {
-                        dfsLCA(U);
+                        depth[U] = depth[V] + 1;
+                        self(U);
                         UF.checkedUnite(V, U);
                         ancestors[UF.root(V)] = V;
                     }
@@ -109,7 +97,7 @@ public:
                     if (visited[QU])
                     {
                         int const LCA = ancestors[UF.root(QU)];
-                        result[q] = power(2, (depth[V] - depth[LCA]) + (depth[QU] - depth[LCA]) - 1);
+                        result[q] = P2[(depth[V] - depth[LCA]) + (depth[QU] - depth[LCA]) - 1];
                     }
                 }
             };
@@ -117,3 +105,4 @@ public:
         return result;
     }
 };
+
