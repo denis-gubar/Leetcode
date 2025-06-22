@@ -5,6 +5,7 @@ public:
         for (char c : word)
             ++M[c];
         vector<int> A;
+        A.reserve(M.size());
         for (auto [key, value] : M)
             A.push_back(value);
         sort(A.begin(), A.end());
