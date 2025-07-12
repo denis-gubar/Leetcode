@@ -8,6 +8,7 @@ public:
 			A.push_back({ nums[i], i });
 		sort(A.begin(), A.end());
 		vector<int>	I;
+        I.reserve(k);
 		for (int i = N - k; i < N; ++i)
 			I.push_back(A[i].second);
 		sort(I.begin(), I.end());
