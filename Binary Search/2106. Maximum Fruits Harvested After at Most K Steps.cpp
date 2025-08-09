@@ -4,6 +4,7 @@ public:
 		int result = 0;
 		int N = fruits.size();
 		vector<int> F(200'001), A{ 0 };
+        A.reserve(200'002);
 		for (int i = 0; i < N; ++i)
 		{
 			int const& position = fruits[i][0];

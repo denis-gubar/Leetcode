@@ -4,12 +4,13 @@ public:
 	{
 		int result = 0;
 		string t(s);
-		string z;
 		int q = t.size() + 1;
+		string z;
+        z.reserve(q);
 		while (q > t.size())
 		{
 			q = t.size();
-			string z;
+			z.clear();
 			for (int i = 0; i < t.size(); ++i)
 			{
 				char c = t[i];
