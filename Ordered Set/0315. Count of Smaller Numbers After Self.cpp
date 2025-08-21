@@ -1,36 +1,32 @@
+static int mergeBuffer[2'000'000];
 class Solution {
 public:
-	void mergeSort(vector<pair<int, int>>& A, vector<int>& result)
-	{
-		int N = A.size();
-		if (N < 2) return;
-		int m = N / 2;
-		vector<pair<int, int>> left(A.begin(), A.begin() + m);
-		vector<pair<int, int>>	right(A.begin() + m, A.end());
-		mergeSort(left, result);
-		mergeSort(right, result);
-		auto L = left.begin();
-		auto R = right.begin();
-		for (int i = 0; i < N; ++i)
-		{
-			if (R == right.end() || L != left.end() && L->first <= R->first)
-			{
-				result[L->second] += R - right.begin();
-				A[i] = *L, ++L;
-			}
-			else
-			{
-				A[i] = *R, ++R;
-			}
-		}
-	}
-	vector<int> countSmaller(vector<int>& nums) {		
-		int N = nums.size();
-		vector<pair<int, int>> A;
-		for (int i = 0; i < N; ++i)
-			A.emplace_back(nums[i], i);
-		vector<int>	result(N);
-		mergeSort(A, result);
-		return result;
-	}
+    vector<int> countSmaller(vector<int>& nums) {
+        int const N = nums.size();
+        vector<int> result(N);
+        iota(&mergeBuffer[0], &mergeBuffer[0] + N, 0);
+        int offset = N;
+        auto mergeSort = [&offset, &result, &nums](this const auto& self, int first, int last) -> void
+            {
+                int const N = last - first;
+                if (N < 2)
+                    return;
+                int const F = offset;
+                memcpy(&mergeBuffer[0] + F, &mergeBuffer[0] + first, sizeof(mergeBuffer[0]) * N);
+                offset += N;
+                self(F, F + N / 2);
+                self(F + N / 2, F + N);
+                int L = F;
+                int R = F + N / 2;
+                for (int i = first; i < last; ++i)
+                {
+                    if (R == F + N || L != F + N / 2 && nums[mergeBuffer[L]] <= nums[mergeBuffer[R]])
+                        mergeBuffer[i] = mergeBuffer[L], result[mergeBuffer[L]] += R - (F + N / 2), ++L;
+                    else
+                        mergeBuffer[i] = mergeBuffer[R], ++R;
+                }
+            };
+        mergeSort(0, N);
+        return result;
+    }
 };

@@ -32,5 +32,5 @@ public:
 			return -1;
 		return M[path];
 	}
-	map<string, int> M;
+	unordered_map<string, int> M;
 };

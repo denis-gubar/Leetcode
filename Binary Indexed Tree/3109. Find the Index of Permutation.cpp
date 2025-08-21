@@ -1,4 +1,5 @@
 static int mergeBuffer[2'000'000];
+static int const MOD = 1'000'000'007;
 class Solution {
 public:
     vector<int> countSmaller(vector<int>& nums) {
@@ -27,6 +28,17 @@ public:
                 }
             };
         mergeSort(0, N);
+        return result;
+    }
+    int getPermutationIndex(vector<int>& perm) {
+        int result = 0;
+        vector<int> A = countSmaller(perm);
+        int const N = perm.size();
+        for (int i = 0, fact = 1; i < N; ++i)
+        {
+            result = (result + 1LL * fact * A[N - 1 - i]) % MOD;
+            fact = 1LL * fact * (i + 1) % MOD;
+        }
         return result;
     }
 };
