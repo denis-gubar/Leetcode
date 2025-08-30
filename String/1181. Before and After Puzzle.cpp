@@ -12,8 +12,11 @@ class Solution {
 	}
 public:
 	vector<string> beforeAndAfterPuzzles(vector<string>& phrases) {
+        int const N = phrases.size();
 		vector<string> result;
+        result.reserve(N * N);
 		vector<vector<string>> P;
+        P.reserve(N);
 		for (string const& p : phrases)
 			P.push_back(split(p, ' '));
 		for(int i = 0; i < P.size(); ++i)
