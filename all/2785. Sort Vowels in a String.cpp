@@ -2,7 +2,9 @@ class Solution {
 public:
     string sortVowels(string s) {
         string vowels = "aeiouAEIOU";
+        int const N = s.size();
         string t;
+        t.reserve(N);
         for (char c : s)
             if (vowels.find(c) != string::npos)
                 t.push_back(c);

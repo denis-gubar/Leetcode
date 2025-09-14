@@ -10,7 +10,9 @@ public:
 	pair<string, int> removeVowels(const string& s)
 	{
 		string vowels{"aeiou"};
+        int const N = s.size();
 		pair<string, int> result{ "", 0 };
+        result.first.reserve(N);
 		for (char x : s)
 			if (vowels.find(x) == string::npos)
 				result.first += x;
