@@ -1,56 +1,98 @@
 static int const MOD = 1'000'000'007;
-static int A[26];
-static int M[26][26];
-static int R[26][26];
-static void multiply(int arr1[26][26], int arr2[26][26])
+static unsigned int A[26];
+template<size_t SIZE, typename T>
+struct TransformationMatrix
 {
-    int arr3[26][26];
-    for (int i = 0; i < 26; ++i)
-        for (int j = 0; j < 26; ++j)
-        {
-            arr3[i][j] = 0;
-            for (int k = 0; k < 26; ++k)
-                arr3[i][j] = (arr3[i][j] + 1LL * arr1[i][k] * arr2[k][j]) % MOD;
-        }
-    memcpy(arr1, arr3, 4 * 26 * 26);
-}
-static void power(int M[26][26], int N)
-{
-    int A[26][26];
-    memcpy(A, M, 4 * 26 * 26);
-    memset(R, 0, sizeof(R));
-    for (int i = 0; i < 26; ++i)
-        R[i][i] = 1;
-
-    while (N) 
+    T Matrix[SIZE * SIZE];
+    TransformationMatrix()
     {
-        if (N & 1)
-            multiply(R, A);
-        multiply(A, A);
-        N >>= 1;
+        zero(Matrix);
     }
-}
+    void zero(T* A)
+    {
+        memset(A, 0, sizeof(T) * SIZE * SIZE);
+    }
+    void identity(T* A)
+    {
+        zero(A);
+        for (unsigned int i = 0; i < SIZE; ++i)
+            A[i * SIZE + i] = 1;
+    }
+    void copy(T* result, T* const A)
+    {
+        memcpy(result, A, sizeof(T) * SIZE * SIZE);
+    }
+    void multiply(T* result, T* const A, T* const B)
+    {
+        for (unsigned int i = 0; i < SIZE; ++i)
+        {
+            T* c = result + i * SIZE;
+            for (unsigned int j = 0; j < SIZE; ++j)
+                c[j] = 0;
+            for (unsigned int k = 0; k < SIZE; ++k)
+            {
+                T* const b = B + k * SIZE;
+                T const a = A[i * SIZE + k];
+                for (unsigned int j = 0; j < SIZE; ++j)
+                    c[j] = (c[j] + 1LL * a * b[j]) % MOD;
+            }
+        }
+    }
+    void multiplyVector(T* result, T* const A, T* const B)
+    {
+        memset(result, 0, sizeof(T) * SIZE);
+        for (int r = 0; r < SIZE; ++r)
+            for (int c = 0; c < SIZE; ++c)
+                //result[r] += A[r * SIZE + c] * B[r];
+                result[r] = (result[r] + 1ULL * A[r * SIZE + c] * B[r]) % MOD;
+    }
+    void power(T* result, size_t N)
+    {
+        if (N == 0)
+        {
+            identity(result);
+            return;
+        }
+        if (N == 1)
+        {
+            copy(result, Matrix);
+            return;
+        }
+        T A[SIZE * SIZE];
+        T temp[SIZE * SIZE];
+        copy(A, Matrix);
+        identity(result);
+        while (N)
+        {
+            if (N & 1)
+            {
+                multiply(temp, result, A);
+                copy(result, temp);
+            }
+            multiply(temp, A, A);
+            copy(A, temp);
+            N >>= 1;
+        }
+    }
+};
 class Solution {
 public:
     int lengthAfterTransformations(string s, int t, vector<int>& nums) {
+        TransformationMatrix<26, unsigned int> TM;
         memset(A, 0, sizeof(A));
         for (char c : s)
             ++A[c - 'a'];
-        memset(M, 0, sizeof(M));
-        auto add = [](int& x, int y)
-            {
-                x += y;
-                if (x >= MOD)
-                    x -= MOD;
-            };
         for (int c = 0; c < 26; ++c)
             for (int x = 1; x <= nums[c]; ++x)
-                ++M[c][(c + x) % 26];
+                ++TM.Matrix[c * 26 + (c + x) % 26];
         long long result = 0;
-        power(M, t);
+        unsigned int R[26 * 26];
+        TM.zero(R);
+        TM.power(R, t);
+        unsigned int B[26];
+        TM.multiplyVector(B, R, A);
         for (int c = 0; c < 26; ++c)
-            for (int nc = 0; nc < 26; ++nc)
-                result += 1LL * R[c][nc] * A[c];
+            result += B[c];
         return result % MOD;
     }
 };

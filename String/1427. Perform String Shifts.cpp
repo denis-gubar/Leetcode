@@ -6,9 +6,9 @@ public:
         {
             int const& direction = currentShift[0];
             int step = currentShift[1];
-            if (direction == 1)
-                step = N - step;
             step %= N;
+            if (direction == 1)
+                step = N - step;            
             if (step)
                 rotate(s.begin(), s.begin() + step, s.end());
         }

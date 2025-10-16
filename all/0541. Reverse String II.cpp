@@ -1,12 +1,12 @@
 class Solution {
 public:
-    string reverseStr( string s, int k ) {
-        string result( s );
-        int i = 0;
-        for (; i + k <= s.size(); i += 2 * k)
-            reverse( result.begin() + i, result.begin() + i + k );
-        if ( i < s.size() )
-            reverse( result.begin() + i, result.end() );
-        return result;
-    }
+	string reverseStr(string s, int k) {
+		int N = s.size();
+		for (int start = 0; start < N; start += 2 * k)
+		{
+			int end = min(start + k, N);
+			reverse(s.begin() + start, s.begin() + end);
+		}
+		return s;
+	}
 };

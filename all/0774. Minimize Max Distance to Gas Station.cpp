@@ -4,6 +4,7 @@ public:
 		double a = 0, b = stations.back() - stations[0];
 		sort(stations.begin(), stations.end());
 		vector<int> D;
+        D.reserve(stations.size());
 		adjacent_difference(stations.begin(), stations.end(), back_inserter(D));
 		sort(D.begin() + 1, D.end());
 		int N = D.size();
