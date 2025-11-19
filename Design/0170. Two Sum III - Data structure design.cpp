@@ -11,7 +11,7 @@ public:
     
     /** Find if there exists any pair of numbers which sum is equal to the value. */
     bool find(int value) {
-        for(pair<int, int> p: M)
+        for(pair<long long, int> p: M)
         {
             if (p.first + p.first == value)
             {
@@ -24,7 +24,7 @@ public:
         }
         return false;
     }
-    unordered_map<int, int> M;
+    unordered_map<long long, int> M;
 };
 
 /**
