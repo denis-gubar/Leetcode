@@ -1,15 +1,18 @@
 class Solution {
 public:
-	int smallestRepunitDivByK(int K) {
-		int N = 0;
-		for (int k = 1; k <= K; ++k)
-		{
-			N *= 10;
-			++N;
-			N %= K;
-            if (N == 0)
-                return k;
-		}
-		return -1;
-	}
+    int smallestRepunitDivByK(int k) {
+        int result = 1;
+        vector<bool> visited(k);
+        int x = 1;
+        while(true)
+        {
+            if (visited[x])
+                return -1;
+            visited[x] = true;
+            if (x % k == 0)
+                return result;
+            ++result, x = (x * 10 + 1) % k;
+        }
+        return result;
+    }
 };

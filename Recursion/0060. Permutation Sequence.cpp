@@ -1,28 +1,26 @@
+static int F[10];
 class Solution {
 public:
-	string getPermutation(int n, int k) {
-		vector<int> F(10);
-		F[0] = 1;
-		for (int i = 1; i < 10; ++i)
-			F[i] = F[i - 1] * i;
-		--k;
-		string result;
-		for (int i = 1; i <= n; ++i)
-			result += '0' + i;
-		int pos = 0;
-		while (k)
-		{
-			while (F[n - pos - 1] > k)
-			{
-				++pos;
-				nth_element(result.begin() + pos, result.begin() + pos, result.end());
-			}
-			int delta = k / F[n - pos - 1];
-			k %= F[n - pos - 1];
-			nth_element(result.begin() + pos, result.begin() + pos + delta, result.end());
-			swap(result[pos], result[pos + delta]);
-		}
-		sort(result.begin() + pos + 1, result.end());
-		return result;
-	}
+    string getPermutation(int N, int K) {
+        F[0] = 1;
+        for(int i = 1; i < 10; ++i)
+            F[i] = i * F[i - 1];
+        --K;
+        string result;
+        string digits(N, ' ');
+        iota(digits.begin(), digits.end(), '1');
+        int i = N - 1;
+        while(i >= 0)
+        {
+            int d = 0;
+            if (K > 0)
+            {
+                d = K / F[i];
+                K -= F[i] * d;
+            }
+            result += digits[d], digits.erase(digits.begin() + d);            
+            --i;
+        }
+        return result;
+    }
 };
