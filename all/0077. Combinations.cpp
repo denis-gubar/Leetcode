@@ -1,18 +1,17 @@
 class Solution {
 public:
-	vector<vector<int>> combine(int n, int k) {
-		vector<vector<int>> result;
-		vector<int> A(n);
-		for (int i = 0; i < k; ++i)
-			A[i] = 1;
-		reverse(A.begin(), A.end());
-		do
-		{
-			result.push_back({});
-			for (int i = 0; i < n; ++i)
-				if (A[i])
-					result.back().push_back(i + 1);
-		} while (next_permutation(A.begin(), A.end()));
-		return result;
-	}
+    vector<vector<int>> combine(int N, int K) {
+        vector<vector<int>> result;
+        for(int mask = 0; mask < (1 << N); ++mask)
+            if (bitset<20>(mask).count() == K)
+            {
+                vector<int> current;
+                current.reserve(K);
+                for(int k = 0; k < N; ++k)
+                    if (mask & (1 << k))
+                        current.push_back(k + 1);
+                result.push_back(current);
+            }
+        return result;
+    }
 };
