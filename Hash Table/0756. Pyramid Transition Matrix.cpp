@@ -1,27 +1,31 @@
 class Solution {
 public:
-    bool pyramidTransition( string bottom, vector<string>& allowed ) {
-        int n = bottom.size();
-        vector<string> S;
-        for (int i = 0; i < n; ++i)
-            S.push_back( string(1, bottom[i]) );
-        while (S.size() > 1)
-        {
-            vector<string> X;
-            X.swap( S );
-            for (int i = 0; i + 1 < X.size(); ++i)
+    bool pyramidTransition(string bottom, vector<string>& allowed) {
+        int const N = bottom.size();
+        string next(N - 1, 'A');
+        vector<bool> A(216);
+        for (string const& s : allowed)
+            A[(s[0] - 'A') * 36 + (s[1] - 'A') * 6 + (s[2] - 'A')] = true;
+        auto dfs = [&A](this const auto& self, string const& s, string& next, int pos) -> bool
             {
-                string current = "";
-                for (const auto& a : allowed)
-                    if (X[i].find( a[0] ) != string::npos && X[i + 1].find( a[1] ) != string::npos)
-                        current += string( 1, a[2] );
-                sort( current.begin(), current.end() );
-                current.erase( unique( current.begin(), current.end() ), current.end() );
-                S.push_back( current );
-                if (current.empty())
-                    return false;
-            }
-        }
-        return true;
+                int const N = s.size();
+                if (N == 1)
+                    return true;
+                if (N == pos)
+                {
+                    string ns = next;
+                    string nnext(N - 2, 'A');
+                    return self(ns, nnext, 1);
+                }
+                for(int c = 0; c < 6; ++c)
+                    if (A[(s[pos - 1] - 'A') * 36 + (s[pos] - 'A') * 6 + c])
+                    {
+                        next[pos - 1] = 'A' + c;
+                        if (self(s, next, pos + 1))
+                            return true;
+                    }
+                return false;
+            };
+        return dfs(bottom, next, 1);
     }
 };

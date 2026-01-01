@@ -20,6 +20,8 @@ public:
                 return false;
         if (A[x][y] + A[x + 1][y + 1] + A[x + 2][y + 2] != S)
             return false;
+        if (A[x][y + 2] + A[x + 1][y + 1] + A[x + 2][y] != S)
+            return false;
         return true;
     }
     int numMagicSquaresInside( vector<vector<int>>& grid ) {
