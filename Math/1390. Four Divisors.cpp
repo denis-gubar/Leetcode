@@ -2,9 +2,9 @@ class Solution {
 public:
 	int check(int n)
 	{
-		int divs = 0;
-        int sum = 0;
-		for(int x = 1; x * x <= n; ++x)
+		int divs = 2;
+        int sum = 1 + n;
+		for(int x = 2; x * x <= n; ++x)
 			if (n % x == 0)
 			{
 				if (x * x == n)
