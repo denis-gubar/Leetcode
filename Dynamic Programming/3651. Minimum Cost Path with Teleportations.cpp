@@ -16,8 +16,8 @@ public:
 				return grid[ia][ja] < grid[ib][jb];
 			});
 		vector<pair<int, int>> P(N * M);
-		for (int i = 0, x = 0; i < N; ++i)
-			for (int j = 0; j < M; ++j, ++x)
+		for (int i = N - 1, x = N * M - 1; i >= 0; --i)
+			for (int j = M - 1; j >= 0; --j, --x)
 				P[x] = { I[x] / M, I[x] % M };
 		vector<int> S(K + 1);
 		set<pair<Distance, NodeIndex>> activeVertices;

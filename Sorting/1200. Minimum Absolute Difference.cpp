@@ -4,6 +4,7 @@ public:
 		vector<int> A(arr);
 		sort(A.begin(), A.end());
 		vector<int> B;
+        B.reserve(A.size());
 		for (int i = 1; i < A.size(); ++i)
 			B.push_back(A[i] - A[i - 1]);
 		int M = *min_element(B.begin(), B.end());
