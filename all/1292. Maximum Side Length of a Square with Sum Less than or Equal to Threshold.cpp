@@ -3,9 +3,11 @@ public:
 	int maxSideLength(vector<vector<int>>& mat, int threshold) {
 		int N = mat.size(), M = mat[0].size();
 		vector<vector<int>> A;
+        A.reserve(N);
 		for (auto const& row : mat)
 		{
 			A.push_back({});
+            A.back().reserve(M + 1);
 			partial_sum(row.begin(), row.end(), back_inserter(A.back()));
 		}
 		for (int i = 1; i < N; ++i)

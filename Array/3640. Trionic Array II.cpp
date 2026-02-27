@@ -1,7 +1,10 @@
 class Solution {
 public:
-    long long maxSumTrionic(vector<int>& nums) {
-        long long const INF = -(1LL << 60);
+    static long long const INF = -(1LL << 60);
+    long long calc(vector<int>& nums)
+    {
+        if (nums.size() < 4)
+            return INF;
         long long result = INF;
         nums.push_back(-(1 << 30));
         int const N = nums.size();
@@ -58,6 +61,19 @@ public:
             if (P[i - 1].first != INF && P[i].first == INF && P[i + 1].first != INF)
                 result = max(result, P[i - 1].second + P[i].second + P[i + 1].first);
         }
+        return result;
+    }
+    long long maxSumTrionic(vector<int>& nums) {        
+        long long result = INF;
+        nums.push_back(nums.back());
+        int const N = nums.size();
+        vector<int> A;
+        A.reserve(N);
+        for (int i = 0; i < N; ++i)
+            if (i == 0 || nums[i] != nums[i - 1])
+                A.push_back(nums[i]);
+            else
+                result = max(result, calc(A)), A.clear(), A.push_back(nums[i]);
         return result;
     }
 };
