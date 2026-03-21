@@ -24,27 +24,28 @@ struct TransformationMatrix
     }
     void multiply(T* result, T* const A, T* const B)
     {
-        for (unsigned int i = 0; i < SIZE; ++i)
+        T* c = result;
+        for (unsigned int i = 0, pos = 0; i < SIZE; ++i)
         {
-            T* c = result + i * SIZE;
-            for (unsigned int j = 0; j < SIZE; ++j)
-                c[j] = 0;
-            for (unsigned int k = 0; k < SIZE; ++k)
+            memset(c, 0, sizeof(T) * SIZE);
+            T* b = B;
+            for (unsigned int k = 0; k < SIZE; ++k, ++pos)
             {
-                T* const b = B + k * SIZE;
-                T const a = A[i * SIZE + k];
                 for (unsigned int j = 0; j < SIZE; ++j)
-                    c[j] = (c[j] + 1LL * a * b[j]) % MOD;
+                    //c[j] += A[pos] * b[j];
+                    c[j] = (c[j] + 1LL * A[pos] * b[j]) % MOD;
+                b += SIZE;
             }
+            c += SIZE;
         }
     }
     void multiplyVector(T* result, T* const A, T* const B)
     {
         memset(result, 0, sizeof(T) * SIZE);
-        for (int r = 0; r < SIZE; ++r)
-            for (int c = 0; c < SIZE; ++c)
-                //result[r] += A[r * SIZE + c] * B[r];
-                result[r] = (result[r] + 1ULL * A[r * SIZE + c] * B[r]) % MOD;
+        for (int r = 0, pos = 0; r < SIZE; ++r)
+            for (int c = 0; c < SIZE; ++c, ++pos)
+                //result[r] += A[pos] * B[r];
+                result[r] = (result[r] + 1ULL * A[pos] * B[r]) % MOD;
     }
     void power(T* result, size_t N)
     {
