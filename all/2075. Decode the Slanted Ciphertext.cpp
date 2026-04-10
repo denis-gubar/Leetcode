@@ -3,6 +3,7 @@ public:
 	string decodeCiphertext(string encodedText, int rows) {
 		int N = encodedText.size();
 		string result;
+        result.reserve(N);
 		int columns = N / rows;
 		for (int x = 0, y = 0; y < columns; )
 		{
@@ -14,7 +15,7 @@ public:
 				y -= rows - 1;
 			}
 		}
-        while(result.back() == ' ')
+        while(!result.empty() && result.back() == ' ')
             result.pop_back();
 		return result;
 	}

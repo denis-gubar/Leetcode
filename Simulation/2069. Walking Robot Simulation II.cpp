@@ -9,7 +9,7 @@ public:
 		P = 2 * (M + N) - 4;
 	}
 
-	void move(int num) {
+	void step(int num) {
         if (num == 0)
             return;
         num %= P;
@@ -24,12 +24,12 @@ public:
 		if (nx >= 0 && nx < N && ny >= 0 && ny < M)
         {            
 			x = nx, y = ny;
-            move(num - 1);
+            step(num - 1);
         }
 		else
 		{
 			dir = (dir + 1) % 4;
-			move(num);
+			step(num);
 		}
 	}
 
