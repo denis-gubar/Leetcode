@@ -7,9 +7,11 @@ public:
 		int N = grid.size(), M = grid[0].size();
 		int x = 0, y = 0;
 		queue<int> Q;
+        vector<vector<bool>> visited(N, vector<bool>(M));
 		int dirs = grid[x][y];
 		Q.push(x); Q.push(y); Q.push(directions[dirs].first);
 		Q.push(x); Q.push(y); Q.push(directions[dirs].second);
+        visited[x][y] = true;
 		while (!Q.empty())
 		{
 			x = Q.front(); Q.pop();
@@ -18,15 +20,17 @@ public:
 			if (x == N - 1 && y == M - 1)
 				return true;
 			int nx = x + dx[z], ny = y + dy[z];
-			if (nx >= 0 && nx < N && ny >= 0 && ny < M)
+			if (nx >= 0 && nx < N && ny >= 0 && ny < M && !visited[nx][ny])
 			{
 				int ndirs = grid[nx][ny];
 				if (z == (directions[ndirs].first + 2) % 4)
 				{
+                    visited[nx][ny] = true;
 					Q.push(nx); Q.push(ny); Q.push(directions[ndirs].second);
 				}
 				if (z == (directions[ndirs].second + 2) % 4)
 				{
+                    visited[nx][ny] = true;
 					Q.push(nx); Q.push(ny); Q.push(directions[ndirs].first);
 				}
 			}
